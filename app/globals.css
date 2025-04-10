@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
-:root {
+/* :root {
   --background: #ffffff;
   --foreground: #171717;
 }
+  
 
 @theme inline {
   --color-background: var(--background);
@@ -23,4 +24,69 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+} */
+
+/* Apply the font globally */
+body {
+  font-family: var(--font-poppins), sans-serif;
+}
+
+@theme {
+  --color-green: #7fad39;
+}
+
+.Categorie_item {
+  display: flex;
+  justify-content: center;
+
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+#banner_section>div {
+
+  &:nth-child(1) {
+    background-image: url('/banner/bg_3.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom
+  }
+
+  &:nth-child(2) {
+    background-image: url('/banner/bg_1.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center
+  }
+
+}
+
+#latest_product_Slider,
+#Top_rated_product_Slider,
+#best_Review_Product_Slider,
+#product_slider {
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+
+.best_product_item,
+.Categorie_item {
+  scroll-snap-align: start;
+}
+
+.notify-show {
+  animation: notifyshow 0.2s ease-in-out forwards;
+}
+
+@keyframes notifyshow {
+  95% {
+    bottom: 60px;
+  }
+
+  100% {
+    bottom: 50px;
+  }
 }
