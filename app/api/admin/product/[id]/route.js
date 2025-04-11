@@ -13,9 +13,9 @@ export async function DELETE(req, { params }) {
         const { id } = data
         await connectToDatabase()
         const product = await ProductList.findByIdAndDelete(id)
-        const RemoveDir = resolve(process.cwd(), join("public", product.ImageUrl));
-        await unlink(RemoveDir)
         if (!product) return Response.json({ success: false, message: "Product not found!" }, { status: 404 })
+        const RemoveDir = resolve(process.cwd(), join("public", product?.ImageUrl));
+        await unlink(RemoveDir)
 
         return Response.json({ success: true, message: "Successfully Removed" }, { status: 200 })
     } catch (error) {
