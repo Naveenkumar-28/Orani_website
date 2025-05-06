@@ -41,7 +41,7 @@ export default function Home() {
 
   return (
     <div className="h-screen w-screen flex justify-center items-center">
-      <div className="text-xl font-medium">Loading...</div>
+      <div className="border-b-3 border-r-2 bg-green rounded-full size-15"></div>
     </div>
   )
 

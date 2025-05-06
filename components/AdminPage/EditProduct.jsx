@@ -1,111 +1,72 @@
-import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { IoCloseOutline } from 'react-icons/io5'
-import Input from "@/components/AdminPage/Input";
-import { IoIosArrowDown } from 'react-icons/io';
 import Button from "@/components/Button";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AddNotifyMessage } from '@/app/redux/slices/NotifyMessageSlice';
 import axios from 'axios';
-import { addProductList } from '@/app/redux/slices/productListSlice';
+import { useDebounceEffect } from '@/hooks/useDebounceEffect';
+import bodyOverflowHandler from '@/hooks/bodyOverFlowHandler';
+import { ResetProductData, SetProductData } from '@/app/redux/slices/UploadProductSlice';
+import { renderElement } from '@/Utils/RenderElement';
+import { useProductFormData } from '@/Utils/UploadProductFormData';
 
-function EditProduct({ setEditShow, productList, bodyOverflowHandler, EditShow, GetProductList }) {
+function EditProduct({ setEditShow, productList, EditShow, GetProductList }) {
+    const [selectedFile, setSelectedFile] = useState(null)
     const [isActive, setIsActive] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [categoryShow, setCategoryShow] = useState(false)
-    const initialData = useMemo(() => ({
-        _id: '',
-        name: '',
-        file: '',
-        description: '',
-        price: "",
-        discountPrice: '',
-        category: '',
-        stock: '',
-        ImageUrl: ''
-    }), [])
 
+    const dispatch = useDispatch()
+    const EditProductFormData = useProductFormData()
+    const ProductDetails = useSelector(state => state.UploadProductData)
+
+    // Set the initial state of the component when it mounts
     useEffect(() => {
-        try {
-
-            const product = productList.find((product) => product._id == EditShow)
-            if (!product) return setEditShow(false)
-            const { name, description, price, discountPrice, category, stock, ImageUrl, _id } = product
-            const data = {
-                id: _id,
-                name: name,
-                file: '',
-                description: description,
-                price: price,
-                discountPrice: discountPrice,
-                category: category,
-                stock: stock,
-                ImageUrl: ImageUrl
-            }
-            dispatch({ type: 'EDITPRODUCT', payload: data })
-
-
-        } catch (error) {
-            console.log(error?.message)
+        const product = productList.find((product) => product._id == EditShow)
+        if (!product) return setEditShow(false)
+        const { name, description, price, discountPrice, category, stock, ImageUrl, _id } = product
+        const data = {
+            id: _id,
+            name: name,
+            file: '',
+            description: description,
+            price: price,
+            discountPrice: discountPrice,
+            category: category,
+            stock: stock,
+            ImageUrl: ImageUrl
         }
-
+        dispatch(SetProductData({ type: 'EDITPRODUCT', payload: data }))
     }, [])
 
-    useEffect(() => {
+    useDebounceEffect(() => {
         bodyOverflowHandler(true)
-        const timeOut = setTimeout(() => {
-            setIsActive(true)
-        }, 200);
-        return () => clearTimeout(timeOut)
+        setIsActive(true)
+    }, [], 200)
+
+    // Function to send notification messages using Redux
+    const sendMessage = useCallback((message) => {
+        dispatch(AddNotifyMessage({ message, type: 'error' }))
     }, [])
 
-    const reduxDispatch = useDispatch()
-
-    const reducer = useCallback((state, action) => {
-
-        switch (action.type) {
-            case "NAME":
-                return { ...state, name: action.payload }
-            case "FILE":
-                return { ...state, file: action.payload }
-            case "DESCRIPTION":
-                return { ...state, description: action.payload }
-            case "PRICE":
-                return { ...state, price: action.payload }
-            case "DISCOUNTPRICE":
-                return { ...state, discountPrice: action.payload }
-            case "CATEGORY":
-                return { ...state, category: action.payload }
-            case "STOCK":
-                return { ...state, stock: action.payload }
-            case "EDITPRODUCT":
-                return { ...action.payload }
-            default:
-                return state
-        }
-    }, [])
-
-
-    const [ProductDetails, dispatch] = useReducer(reducer, initialData)
-
-
+    // Validate the product details before uploading
+    // If any field is empty, show a notification message and return
     const ProductUpload = useCallback(async () => {
 
-        const { name, file, description, price, discountPrice, category, stock, id } = ProductDetails
+        const { name, description, price, discountPrice, category, stock, id } = ProductDetails
         if (!id) return
-        if (!name) return reduxDispatch(AddNotifyMessage("Please fill Name"))
-        if (!description) return reduxDispatch(AddNotifyMessage("Please fill description"))
-        if (!price) return reduxDispatch(AddNotifyMessage("Please fill price"))
-        if (!category) return reduxDispatch(AddNotifyMessage("Please select category"))
-        if (!stock) return reduxDispatch(AddNotifyMessage("Please fill stock "))
+        if (!name) return sendMessage("Please fill Name")
+        if (!description) return sendMessage("Please fill description")
+        if (!price) return sendMessage("Please fill price")
+        if (!category) return sendMessage("Please select category")
 
         const form = new FormData()
         form.append("name", name);
-        form.append("file", file || ''); // Append the file
+        form.append("file", selectedFile || ''); // Append the file
         form.append("description", description);
         form.append("price", price);
         form.append("discountPrice", discountPrice || '');
         form.append("category", category);
-        form.append("stock", stock)
+        form.append("stock", stock || 0)
 
         setLoading(true)
         try {
@@ -113,46 +74,39 @@ function EditProduct({ setEditShow, productList, bodyOverflowHandler, EditShow, 
             console.log(response?.data);
             if (response?.data?.success) {
                 GetProductList()
-                reduxDispatch(AddNotifyMessage("Update Successfully"))
+                dispatch(AddNotifyMessage({ message: "Update Successfully" }))
             }
 
         } catch (error) {
             console.log(error.message)
-            reduxDispatch(AddNotifyMessage("Update failed"))
+            dispatch(AddNotifyMessage({ message: "Update failed", type: 'error' }))
         } finally {
             setLoading(false)
             closeSlider()
         }
 
-    }, [ProductDetails])
+    }, [ProductDetails, selectedFile])
 
 
+    // File handler to validate image size and set the file in the state
     const fileHandler = useCallback((e) => {
         const file = e?.target?.files[0]
         if (!file) return
         const maxSize = 1 * 1024 * 1024
         if (!(file.size < maxSize)) {
-            reduxDispatch(AddNotifyMessage("Image size exceeds the 1MB limit"))
-            return e.target.value = ""; // Reset input
+            dispatch(AddNotifyMessage({ message: "Image size exceeds the 1MB limit", type: 'error' }))
+            return
         }
-        dispatch({ type: "FILE", payload: file })
-
+        setSelectedFile(file)
     }, [])
 
-    const discountPriceHandler = useCallback((e) => {
-
-        if (Number(e?.target?.value) < Number(ProductDetails?.price)) {
-            return dispatch({ type: "DISCOUNTPRICE", payload: e.target.value })
-        }
-        reduxDispatch(AddNotifyMessage("Discount Price should be less than to Price"))
-    }, [ProductDetails])
-
-
+    // Handler to close the slider and reset the state after a timeout
     const closeSlider = useCallback(() => {
         setIsActive(false)
         const timeOut = setTimeout(() => {
             setEditShow('')
             bodyOverflowHandler(false)
+            dispatch(ResetProductData())
         }, 500);
         return () => clearTimeout(timeOut)
     }, [])
@@ -174,7 +128,7 @@ function EditProduct({ setEditShow, productList, bodyOverflowHandler, EditShow, 
                                 <input onChange={fileHandler} id='file' accept='image/png,image/jpeg,image/jpg' type="file" className='hidden' />
                             </label>
                         </div>
-                        {!ProductDetails?.file ? (
+                        {!selectedFile ? (
                             <div className='rounded-sm overflow-hidden h-62 border-2 border-green'>
                                 {ProductDetails?.ImageUrl ? (
 
@@ -185,50 +139,28 @@ function EditProduct({ setEditShow, productList, bodyOverflowHandler, EditShow, 
                             </div>
                         ) : (
                             <div className='rounded-sm overflow-hidden h-62 border-2 border-green'>
-                                <img src={URL.createObjectURL(ProductDetails?.file)} className='h-full w-full object-contain' alt="Upload_Image" />
+                                <img src={URL.createObjectURL(selectedFile)} className='h-full w-full object-contain' alt="Upload_Image" />
                             </div>
                         )}
 
                     </div>
-                    <Input name={"Name :"} value={ProductDetails?.name} onChange={(e) => dispatch({ type: "NAME", payload: e.target.value })} type={"text"} placeholder={"Enter product name"} />
-                    <div className='flex flex-col gap-1'>
-                        <label className='font-medium'>Description :</label>
-                        <textarea value={ProductDetails?.description} onChange={(e) => dispatch({ type: "DESCRIPTION", payload: e.target.value })} placeholder='Enter product Description' className="border-2 rounded-sm py-5 text-sm font-light text-gray-600 outline focus:border-green outline-transparent px-5 border-gray-200 w-full h-32" name="description" />
-                    </div>
-                    <Input name={"Price :"} value={ProductDetails?.price} onChange={(e) => dispatch({ type: "PRICE", payload: e.target.value })} type={"number"} placeholder={"Enter product price"} />
-
-                    <Input name={"Discount Price :"} value={ProductDetails?.discountPrice} onChange={discountPriceHandler} placeholder={"Enter discount price (Optional)"} type={"number"} />
-
-                    <div className="flex flex-col gap-1">
-
-                        <label className='font-medium'>Category :</label>
-                        <div className=' relative gap-2 py-4 cursor-pointer w-full focus-within:border-green flex justify-center px-4  rounded-sm items-center border-2 border-gray-200'>
-                            <input
-                                placeholder='Select Category'
-                                readOnly
-                                value={ProductDetails?.category}
-                                onFocus={() => setCategoryShow(true)}
-                                onBlur={() => setTimeout(() => setCategoryShow(false), 300)}
-                                type="text"
-                                className='cursor-pointer capitalize border-none text-gray-500 outline-none w-full text-sm' />
-                            <IoIosArrowDown className='text-gray-500' />
-                            {categoryShow && (
-                                <ul className='w-full rounded-md overflow-hidden bottom-15 shadow-md border-2 border-green  left-0 outline-none absolute z-50 bg-neutral-500 text-white'>
-                                    {
-                                        ["oranges", "juice", "vegetables", "fruits"].map((Name, index) => {
-                                            return (
-                                                <li onClick={(e) => dispatch({ type: "CATEGORY", payload: Name })} className={`capitalize px-2 py-1 cursor-pointer hover:bg-green hover:text-white ${ProductDetails?.category?.toLowerCase() == Name && "bg-green text-white"} `} key={index} value={Name} >
-                                                    {Name}
-                                                </li>
-                                            )
-                                        })
-                                    }
-                                </ul>
-                            )}
-                        </div>
-                    </div>
-                    <Input name={"Stock :"} value={ProductDetails?.stock} onChange={(e) => dispatch({ type: "STOCK", payload: e.target.value })} placeholder={"Enter product stock"} type={"number"} />
-                    <Button loading={loading} onClick={ProductUpload} name={"Update"} width={"max-w-full"} />
+                    {
+                        // Map through the form data and render the input elements dynamically
+                        EditProductFormData.map((item, index) => {
+                            return (
+                                <div key={index} className='flex flex-col gap-1'>
+                                    {renderElement(item.Element, {
+                                        labelName: item.labelName,
+                                        value: ProductDetails[item.title],
+                                        onChange: item.onchange,
+                                        type: item.type,
+                                        placeholder: item.placeholder
+                                    })}
+                                </div>
+                            )
+                        })
+                    }
+                    <Button loading={loading} onClick={ProductUpload} loadingContent='Updating . . . ' title={"Update"} />
                 </section>
             </div>
             <div onClick={closeSlider} className='bg-neut h-full w-full absolute -z-1 bg-black opacity-50 cursor-pointer'>

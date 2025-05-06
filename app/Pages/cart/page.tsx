@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import CartProductItem from "@/components/CartPage/CartProductItem";
 import MenuSection from "@/components/MenuSection"
 import Button from "@/components/Button"
@@ -11,7 +11,6 @@ import { CartType } from '@/app/types';
 
 function Cart() {
     const router = useRouter()
-    const dispatch = useDispatch()
     const [total, setTotal] = useState({
         subTotal: 0,
         discount: 0,
@@ -20,7 +19,6 @@ function Cart() {
     })
 
     const CartList: CartType[] = useSelector((state: any) => state.CartList) || []
-    console.log(CartList);
 
     useEffect(() => {
 
@@ -42,16 +40,16 @@ function Cart() {
     return (
         <>
             <MenuSection name={'cart'} />
-            <div className="container lg:px-20 mx-auto md:px-20 sm:px-5 px-5 2xl:px-52">
+            <div className="container lg:px-20 mx-auto md:px-20 sm:px-5 px-5 2xl:px-52 mb-30">
                 <div
-                    className="bg-[#7fad39] hidden lg:flex lg:h-20  text-white lg:text-lg font-medium items-center justify-center gap-2">
+                    className="bg-green hidden lg:flex lg:h-20  text-white lg:text-lg font-medium items-center justify-center gap-2">
                     <div className="lg:w-3/12 w-4/12 justify-center items-center flex"> </div>
                     <div className="lg:w-3/12 w-4/12 sm:justify-center sm:items-center flex">Product name</div>
                     <div className="lg:w-2/12 justify-center items-center lg:flex hidden">Price</div>
                     <div className="lg:w-2/12 w-2/12 justify-center items-center flex">Quantity</div>
                     <div className="lg:w-2/12 w-2/12 justify-center items-center flex  ">Total</div>
                 </div>
-                <div className="w-full mb-20" id="cart_Item_Container">
+                <div className="w-full mb-20">
 
                     {CartList.length > 0 ? (CartList.map((product, index) => {
                         return <CartProductItem key={index} product={product} />
@@ -63,7 +61,7 @@ function Cart() {
 
 
                 </div>
-                {CartList.length > 0 ? (
+                {CartList.length > 0 && (
                     <div className="w-full grid xl:grid-cols-3 grid-cols-1 md:grid-cols-2 mb-40 gap-10">
                         <div className="flex flex-col">
                             <div className="border border-gray-200 px-5 pt-5 pb-8 flex flex-col gap-5 mb-5">
@@ -76,7 +74,7 @@ function Cart() {
                                 </div>
                             </div>
 
-                            <Button name={"Apply Coupon"} />
+                            <Button title={"Apply Coupon"} className='text-lg w-max py-3' />
                         </div>
                         <div className="flex flex-col">
                             <div className="border border-gray-200 px-5 pt-5 pb-8 flex flex-col gap-5 mb-5">
@@ -85,7 +83,6 @@ function Cart() {
                                 <div className="mb-2">
                                     <h5 className="text-sm font-semibold mb-2">Country</h5>
                                     <Input type={"text"} />
-
                                 </div>
                                 <div className="mb-2">
                                     <h5 className="text-sm font-semibold mb-2">State/Province</h5>
@@ -98,7 +95,7 @@ function Cart() {
 
                                 </div>
                             </div>
-                            <Button name={"Estimate"} />
+                            <Button title={"Estimate"} className='text-lg w-max py-3' />
                         </div>
                         <div className="flex flex-col">
                             <div className="border border-gray-200 px-5 pt-5 pb-8 flex flex-col gap-5 mb-5">
@@ -106,27 +103,25 @@ function Cart() {
                                 <h5 className="text-xl font-medium">Cart Totals</h5>
                                 <div className="flex justify-between text-gray-600">
                                     <h5>Subtotal</h5>
-                                    <p id="total_price">₹{total.subTotal}.00</p>
+                                    <p id="total_price">₹{total.subTotal.toFixed(2)}</p>
                                 </div>
                                 <div className="flex justify-between text-gray-600">
                                     <h5>Delivery</h5>
-                                    <p id="DeliveryCharges">{total.deliveryCharges ? `₹${total.deliveryCharges}.00` : 'Free'}</p>
+                                    <p id="DeliveryCharges">{total.deliveryCharges ? `₹${total.deliveryCharges.toFixed(2)}` : 'Free'}</p>
                                 </div>
                                 <div className="flex justify-between text-gray-600">
                                     <h5>Discount</h5>
-                                    <p id="discount">₹{total.discount ? -total.discount : total.discount}.00</p>
+                                    <p id="discount">₹{(total.discount ? -total.discount : total.discount).toFixed(2)}</p>
                                 </div>
                                 <div className="flex justify-between font-semibold border-t py-3 border-gray-200">
                                     <h5 className="uppercase">Total</h5>
-                                    <p id="total">₹{total.total}.00</p>
+                                    <p id="total">₹{total.total.toFixed(2)}</p>
                                 </div>
                             </div>
-
-                            <Button name={"Proceed to checkout"} onClick={() => router.push('/Pages/checkout')} />
-
+                            <Button title={"Proceed to checkout"} className='text-lg py-3' onClick={() => router.push('/Pages/checkout')} />
                         </div>
                     </div>
-                ) : false}
+                )}
 
             </div>
         </>

@@ -1,36 +1,38 @@
 "use client"
-import React, { useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux';
+import React, { useCallback, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import ProductCard from "./ProductCard"
+import { addProductList } from '@/app/redux/slices/productListSlice';
+import axios from 'axios';
 
 function FeaturedProductSection() {
-    const [filterProductList, setFilterProductList] = useState([])
-    const [categoryName, setCategoryName] = useState('all')
-    const categoireClassName = "font-normal text-gray-500 lg:text-lg sm:text-base text-sm cursor-pointer border-b-2 "
+    const [limit, setLimit] = useState(8)
+    const [page, setPage] = useState(1)
+    const [loadingSkeleton, setLoadingSkeleton] = useState(false)
+    const dispatch = useDispatch()
 
-    const productList = useSelector((state) => state.ProductList)
+    const productList = useSelector((state) => state.ProductList) || []
 
+    const GetProductList = useCallback(async () => {
 
-
-    const selectedList = (categoire) => {
-
-        setCategoryName(categoire.toLowerCase())
-
-        if (categoire.toLowerCase() == 'all') {
-            setFilterProductList(productList)
-        } else {
-            setFilterProductList(() => {
-                return productList.filter((product) => product.category.toLowerCase() == categoire.toLowerCase())
-            })
+        setLoadingSkeleton(true)
+        try {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products?limit=${limit}&page=${page}`)
+            if (response?.data?.success) {
+                console.log(response.data);
+                const { products } = response.data
+                dispatch(addProductList(products))
+            }
+        } catch (error) {
+            console.log(error.message)
+        } finally {
+            setLoadingSkeleton(false)
         }
-    }
+    }, [page, limit])
 
     useEffect(() => {
-        if (productList.length > 0) {
-            selectedList('all');
-        }
-    }, [productList]) //Runs only when productList changes
-
+        GetProductList()
+    }, [])
 
     return (
         <section className="pt-20 px-5 container lg:px-20 mx-auto md:px-20 2xl:px-52 relative select-none mb-32 ">
@@ -41,15 +43,22 @@ function FeaturedProductSection() {
             </div>
             <div id="Featured_product_Container"
                 className=" grid gap-x-7 gap-y-14 xl:grid-cols-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-[300px] mb-20  ">
+                {!loadingSkeleton ? (
+                    <>
+                        {productList.map((product, index) => {
+                            return (
+                                <ProductCard delay={index * 100} product={product} key={index} />
+                            )
 
-                {filterProductList.map((product, index) => {
-                    if (index >= 8) return
-                    return (
-
-                        <ProductCard delay={index * 100} product={product} key={index} />
-                    )
-
-                })}
+                        })}
+                    </>
+                ) : (
+                    <>
+                        {[...Array(limit)].map((_, index) => {
+                            return <div key={index} className="bg-gray-300 animate-pulse h-full rounded-sm" ></div>
+                        })}
+                    </>
+                )}
             </div>
         </section >
     )

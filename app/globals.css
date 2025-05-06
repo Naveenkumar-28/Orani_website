@@ -1,31 +1,5 @@
 @import "tailwindcss";
 
-/* :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-  
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-} */
-
 /* Apply the font globally */
 body {
   font-family: var(--font-poppins), sans-serif;
@@ -33,12 +7,6 @@ body {
 
 @theme {
   --color-green: #7fad39;
-}
-
-.Categorie_item {
-  display: flex;
-  justify-content: center;
-
 }
 
 html {
@@ -64,29 +32,54 @@ html {
 
 }
 
-#latest_product_Slider,
-#Top_rated_product_Slider,
-#best_Review_Product_Slider,
-#product_slider {
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-}
-
-.best_product_item,
-.Categorie_item {
-  scroll-snap-align: start;
-}
-
 .notify-show {
   animation: notifyshow 0.2s ease-in-out forwards;
 }
 
 @keyframes notifyshow {
-  95% {
-    bottom: 60px;
+  0% {
+    transform: translateX(100%);
   }
 
   100% {
-    bottom: 50px;
+    transform: translateX(0);
   }
 }
+
+.animate-timer {
+  animation: animateTimer 5s linear forwards;
+  width: 100%;
+}
+
+@keyframes animateTimer {
+  100% {
+    width: 0%;
+  }
+}
+
+/* .notify-hide {
+  animation: notifyHide 0.2s ease-in-out forwards;
+} */
+
+/* @keyframes notifyHide {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+} */
+
+
+/* .notify-show {
+  opacity: 1;
+  transform: translateX(-100px);
+  transition: all 0.3s ease;
+} */
+
+/* .notify-hide {
+  opacity: 1;
+  transform: translateX(100%);
+  transition: all 0.3s ease;
+} */

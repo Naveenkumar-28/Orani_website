@@ -2,17 +2,26 @@ import React from 'react'
 
 
 interface ButtonProps {
-    name: string;
+    title: string;
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-    width?: string;
     loading?: boolean;
+    disabled?: boolean;
+    loadingContent?: string;
+    className?: string;
 }
 
-function Button({ name, onClick, width, loading }: ButtonProps) {
+function Button({
+    title = "add",
+    loadingContent = "Loading . . .",
+    onClick = () => { },
+    className = '',
+    loading = false,
+    disabled = false
+}: ButtonProps) {
     return (
-        <button onClick={onClick} disabled={loading}
-            className={`bg-[#7fad39] ${width ? width : 'max-w-fit'}  border-2 border-transparent hover:border-[#7fad39] hover:text-[#7fad39] hover:bg-white duration-200 cursor-pointer text-white py-3 font-medium shadow-2xl  rounded-full px-5`}>
-            {!loading ? name : 'Loading . . .'}
+        <button onClick={onClick} disabled={disabled || loading}
+            className={`${className} ${disabled ? "cursor-not-allowed bg-gray-500" : "cursor-pointer  bg-green hover:border-green hover:text-green hover:bg-white"} border-2 border-transparent  duration-200 text-white py-3 font-normal shadow-2xl  rounded-full px-5`}>
+            {loading ? loadingContent : title}
         </button>
     )
 }

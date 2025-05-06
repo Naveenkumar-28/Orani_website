@@ -1,10 +1,12 @@
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 function BannerSection() {
+    const router = useRouter()
     return (
         <section id="banner_section"
             className="grid grid-cols-1 sm:auto-rows-[300px] auto-rows-[250px] md:auto-rows-[450px] xl:auto-rows-[500px] w-full sm:gap-10 gap-5 mb-32">
-            <div className="w-full h-full  overflow-hidden ">
+            <div onClick={() => router.push(`/Pages/shop?category=${'fruits'}`)} className="w-full h-full  overflow-hidden ">
                 <div className=" w-full h-full justify-end flex">
                     <div
                         className="xl:w-6/12 md:w-8/12 w-10/12 h-full flex flex-col sm:gap-3 xl:gap-5 gap-2 justify-center items-end lg:pe-20 pe-10">
@@ -22,7 +24,7 @@ function BannerSection() {
                 </div>
 
             </div>
-            <div className="w-full h-full  overflow-hidden ">
+            <div onClick={() => router.push(`/Pages/shop?category=${'fruits'}`)} className="w-full h-full  overflow-hidden ">
                 <div className=" w-full h-full justify-start flex">
                     <div
                         className="xl:w-6/12 md:w-8/12 w-10/12 h-full flex flex-col sm:gap-3 xl:gap-5 gap-2 justify-center items-start lg:ps-20 ps-10">

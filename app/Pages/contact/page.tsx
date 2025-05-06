@@ -8,7 +8,7 @@ import ContactSection from "@/components/ContactPage/ContactSection";
 function Contact() {
 
     return (
-        <>
+        <section className='mb-50'>
             <MenuSection name={'Contact'} />
             <section
                 className="grid flex-wrap gap-15 lg:gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 container lg:px-20 mx-auto md:px-20 sm:px-5 px-5 2xl:px-52 mb-20">
@@ -40,7 +40,7 @@ function Contact() {
             {/* Contact Section  */}
             <ContactSection />
 
-        </>
+        </section>
     )
 }
 

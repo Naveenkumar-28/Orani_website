@@ -1,18 +1,18 @@
 import React from 'react'
 import { OrderType } from './types';
+import { statusColor } from '@/hooks/statusColor';
 
 type OrderCardPropsType = {
     setID: (value: string) => void;
-    statusColor: (value: string) => void;
     order: OrderType
 }
 
-function OrderCard({ order, setID, statusColor }: OrderCardPropsType) {
+function OrderCard({ order, setID }: OrderCardPropsType) {
     const date = new Date(order?.createdAt)
     const findSingleDigit = (digit: number) => digit < 10 ? `0${digit}` : digit.toString()
     const formattedDate = `${findSingleDigit(date.getDate())}-${findSingleDigit(date.getMonth() + 1)}-${date.getFullYear()}`
     return (
-        <div className='flex py-3  items-center gap-5 lg:text-sm sm:text-xs text-[0.5rem] hover:bg-gray-50 rounded-md'>
+        <div className='flex py-3  items-center gap-5 xl:text-sm lg:text-[0.7em] text-sm  hover:bg-gray-50 rounded-md'>
             <p className='w-3/12 lg:text-start lg:ps-5 text-center'>{order?.razorpay_order_id}</p>
             <p className='w-2/12 text-center'>{formattedDate}</p>
 

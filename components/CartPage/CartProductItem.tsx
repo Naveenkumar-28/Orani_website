@@ -41,17 +41,19 @@ function CartProductItem({ product }: CartProductItemProps) {
                 <div className="lg:w-5/12 justify-center flex flex-col items-center overflow-hidden">
                     <h4 onClick={() => router.replace('singleProduct/' + product?._id)} className="font-medium cursor-pointer mb-2 lg:text-center w-full uppercase text-xl">{product?.name}</h4>
                     <div className='overflow-hidden flex flex-wrap w-full'>
-                        <p className="lg:line-clamp-2 line-clamp-3 text-gray-500 lg:text-base text-sm">{product?.description}</p>
+                        <p className="lg:line-clamp-2 line-clamp-3 text-gray-400 lg:text-base text-sm">{product?.description}</p>
                     </div>
                 </div>
-                <div className="lg:w-3/12  justify-center items-center lg:flex hidden font-normal">₹{product?.discountPrice ? product?.discountPrice : product?.price}</div>
-                <div className="lg:w-2/12  text-lg text-green items-center flex lg:hidden font-normal ">₹{product?.discountPrice ? product?.discountPrice : product?.price}</div>
+                <div className="lg:w-3/12  justify-center items-center lg:flex hidden font-normal">₹{product?.discountPrice ? product?.discountPrice?.toFixed(2) : product?.price?.toFixed(2)}</div>
+                <div className="lg:w-2/12  text-lg text-green items-center flex lg:hidden font-normal ">₹{product?.discountPrice ? product?.discountPrice.toFixed(2) : product?.price.toFixed(2)}</div>
                 <div className=" lg:w-4/12 lg:justify-center items-center flex gap-1 md:gap-3">
                     <div className='sm:h-10 h-8 flex gap-1'>
                         <button onClick={() => dispatch(CartDecrementQuantity({ _id: product._id }))} className="border select-none h-full shadow active:shadow-inner cursor-pointer px-3 border-gray-300 flex justify-center items-center" >
                             <FiMinus />
                         </button>
-                        <input value={quantity} onKeyDown={onKeyPress} onChange={(e) => setQuantity(Number(e.target.value))} type="number"
+                        <input value={quantity} onKeyDown={onKeyPress} onChange={(e) => {
+                            dispatch(CartChangeQuantity({ _id: product?._id, quantity: Math.min(Number(e.target.value || 1), product?.stock) }))
+                        }} type="number"
                             className="border appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border-gray-300 w-15 outline-none h-full text-center" />
 
                         <button onClick={() => dispatch(CartIncrementQuantity({ _id: product._id }))} className="border select-none h-full shadow active:shadow-inner cursor-pointer px-3 border-gray-300 flex justify-center items-center">
@@ -61,7 +63,7 @@ function CartProductItem({ product }: CartProductItemProps) {
                 </div>
                 <div className="lg:w-3/12 w-full lg:justify-center items-center flex font-normal gap-2 ">
                     <div className='lg:hidden'>Total:</div>
-                    <p>₹{Number(product?.discountPrice ? product?.discountPrice : product?.price) * product?.quantity}</p>
+                    <p>₹{((product?.discountPrice ? product?.discountPrice : product?.price) * product?.quantity).toFixed(2)}</p>
                 </div>
             </div>
         </div>

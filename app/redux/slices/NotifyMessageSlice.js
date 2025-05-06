@@ -1,15 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { v4 as uuidv4 } from 'uuid'
 
-const initialState = ''
+const initialState = {
+    messages: [],
+}
 
-const NotifyMessageSlice = createSlice({
-    initialState, name: "NotifyMessage",
+const notifyMessageSlice = createSlice({
+    name: 'notifyMessage',
+    initialState,
     reducers: {
         AddNotifyMessage: (state, action) => {
-            return action.payload
-        }
-    }
+            state.messages.unshift({ id: uuidv4(), ...action.payload })
+        },
+        RemoveNotifyMessage: (state, action) => {
+            state.messages = state.messages.filter((msg) => msg.id !== action.payload)
+        },
+    },
 })
 
-export const { AddNotifyMessage } = NotifyMessageSlice.actions
-export default NotifyMessageSlice.reducer
+export const { AddNotifyMessage, RemoveNotifyMessage } = notifyMessageSlice.actions
+export default notifyMessageSlice.reducer

@@ -12,20 +12,20 @@ function Dashboard() {
     const dispatch = useDispatch()
 
     const clickHandler = async () => {
-        if (!file) return dispatch(AddNotifyMessage('Please select Image alter try again'))
+        if (!file) return dispatch(AddNotifyMessage({ message: 'Please select Image after try again', type: 'warning' }))
         const form = new FormData()
         form.append('file', file)
         setLoading(true)
         try {
             const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/admin/imageUpload`, form)
-            if (response.status < 300) {
+            if (response.data.success) {
                 console.log(response.data);
-                dispatch(AddNotifyMessage("Upload Successfully"))
+                dispatch(AddNotifyMessage({ message: "Upload Successfully" }))
             }
 
         } catch (error) {
             console.log((error as Error).message);
-            dispatch(AddNotifyMessage('Upload failed'))
+            dispatch(AddNotifyMessage({ message: 'Upload failed', type: 'error' }))
 
         } finally {
             setLoading(false)
@@ -38,8 +38,7 @@ function Dashboard() {
         const maxSize = 1 * 1024 * 1024
         if (!file) return
         if (!(file?.size < maxSize)) {
-            dispatch(AddNotifyMessage("Image size exceeds the 1MB limit"))
-            return e.target.value = ""; // Reset input
+            return dispatch(AddNotifyMessage({ message: "Image size exceeds the 1MB limit", type: 'error' }))
         }
         setFile(file)
     }

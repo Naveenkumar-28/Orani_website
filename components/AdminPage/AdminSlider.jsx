@@ -16,10 +16,7 @@ function AdminSlider({ setShow }) {
         const handleResize = () => {
             if (window.innerWidth >= 1024) {
                 // Auto-close when screen size is lg or bigger
-                setVisible(false)
-                setTimeout(() => {
-                    setShow(false)
-                }, 500)
+                handleClose()
             }
         }
 
@@ -43,8 +40,8 @@ function AdminSlider({ setShow }) {
             <div className={`${isvisible ? "-translate-x-0" : "-translate-x-full"} duration-500 lg:w-3/12 h-screen py-5  w-10/12 sm:w-8/12 md:w-6/12 bg-white z-10 lg:hidden  border-r border-gray-300  px-5`}>
                 <div className='flex justify-between mb-5'>
                     <div className='flex items-center gap-2'>
-                        <IoStatsChart className='text-xl' />
-                        <h1 className='font-semibold text-3xl'>Admin Panel</h1>
+                        <IoStatsChart className='md:text-2xl text-xl' />
+                        <h1 className='font-semibold md:text-3xl text-2xl'>Admin Panel</h1>
                     </div>
                     <button onClick={handleClose} className='text-3xl cursor-pointer hover:text-red-500'>
                         <IoClose />

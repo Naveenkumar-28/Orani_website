@@ -10,30 +10,24 @@ import ProductList from "../../../models/ProductList";
 // }
 
 export async function GET(req) {
-    console.log(req.url)
     const { searchParams } = new URL(req.url)
     const page = parseInt(searchParams.get('page')) || 1
     const search = searchParams.get('search')?.trim()
     const limit = parseInt(searchParams.get('limit')) || 10
     const category = searchParams.get('category')
 
+    console.log({ page, search, limit, category })
     try {
         await connectToDatabase();
-        const length = (await ProductList.find()).length
+        let query = {}
+        if (search) query.name = { $regex: search, $options: "i" }
+        if (category) query.category = { $regex: category, $options: "i" }
 
-        if (category || search) {
-
-            const products = await ProductList.find({ name: { $regex: search, $options: "i" }, category: { $regex: category, $options: "i" } })
-                .skip((page - 1) * limit)
-                .limit(limit).select("-ratings ")
-            return Response.json({ success: true, products, length }, { status: 200 })
-        } else {
-
-            const products = await ProductList.find().skip((page - 1) * limit).limit(limit).select("-ratings ")
-            return Response.json({ success: true, products, total: length }, { status: 200 })
-
-        }
-
+        const products = await ProductList.find(query)
+            .skip((page - 1) * limit)
+            .limit(limit).select("-ratings ")
+        const total = await ProductList.countDocuments(query)
+        return Response.json({ success: true, products, total }, { status: 200 })
 
     } catch (error) {
         console.log("Error : ", error.message);

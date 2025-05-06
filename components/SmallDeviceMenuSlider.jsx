@@ -1,8 +1,11 @@
 
+import bodyOverflowHandler from '@/hooks/bodyOverFlowHandler'
+import { useDebounceEffect } from '@/hooks/useDebounceEffect'
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
-import { FaHeart, FaUser } from 'react-icons/fa'
+import { useRouter } from 'next/navigation'
+import React, { useCallback, useState } from 'react'
+import { FaRegHeart, FaUser } from 'react-icons/fa'
 import { FiShoppingCart } from 'react-icons/fi'
 import { IoMdClose } from 'react-icons/io'
 import { MdEmail } from 'react-icons/md'
@@ -10,13 +13,23 @@ import { useSelector } from 'react-redux'
 
 function SmallDeviceMenuSlider({ setSliderShow, pathName }) {
     const [isActive, setActive] = useState(false)
+    const router = useRouter()
     const CartList = useSelector((state) => state.CartList)
     const WishList = useSelector((state) => state.WishList)
-    useEffect(() => {
+
+    useDebounceEffect(() => {
+        setActive(true)
+        bodyOverflowHandler(true)
+    }, [], 300)
+
+    const closerHandler = useCallback(() => {
+        setActive(false)
         setTimeout(() => {
-            setActive(true)
-        }, 300);
+            setSliderShow(false)
+            bodyOverflowHandler(false)
+        }, 500);
     }, [])
+
     return (
         <section className={`fixed h-full w-full z-[100] lg:hidden flex`}>
 
@@ -28,12 +41,7 @@ function SmallDeviceMenuSlider({ setSliderShow, pathName }) {
                                 <img className="h-full w-full object-contain" src="/logo.png" alt="Logo" />
                             </div>
 
-                            <div onClick={() => {
-                                setActive(false)
-                                setTimeout(() => {
-                                    setSliderShow(false)
-                                }, 500);
-                            }} className="py-3 text-3xl flex justify-end px-2 cursor-pointer">
+                            <div onClick={closerHandler} className="py-3 text-3xl flex justify-end px-2 cursor-pointer hover:text-green text-gray-500">
                                 <IoMdClose />
 
                             </div>
@@ -41,19 +49,24 @@ function SmallDeviceMenuSlider({ setSliderShow, pathName }) {
 
                         <div className="flex gap-2 px-10 items-center justify-between py-3 border-b-2 border-gray-200">
                             <div className='flex gap-2'>
-
-                                <div className="relative" >
-                                    <FaHeart className="text-xl cursor-pointer" />
+                                <div onClick={() => {
+                                    router.push('/Pages/wishlist')
+                                    closerHandler()
+                                }} className="relative" >
+                                    <FaRegHeart className="text-xl cursor-pointer" />
                                     {WishList.length > 0 && (
-                                        <div className="absolute top-[-5px] right-[-10px] bg-[#7fad39] rounded-full text-white h-3.5 w-3.5 text-[10px] text-center font-semibold">
+                                        <div className="absolute top-[-5px] right-[-7px] bg-green rounded-full text-white h-3 w-3 text-[9px] text-center font-medium">
                                             {WishList.length}
                                         </div>
                                     )}
                                 </div>
-                                <div className="relative h-full" >
+                                <div onClick={() => {
+                                    router.push('/Pages/cart')
+                                    closerHandler()
+                                }} className="relative h-full" >
                                     <FiShoppingCart className="text-xl ms-3 cursor-pointer" />
                                     {CartList.length > 0 && (
-                                        <div className="absolute top-[-5px] right-[-10px] bg-[#7fad39] rounded-full text-white h-3.5 w-3.5 text-[10px] text-center font-semibold">
+                                        <div className="absolute top-[-5px] right-[-7px] bg-green rounded-full text-white h-3 w-3 text-[9px] text-center font-medium">
                                             {CartList.length}
                                         </div>
                                     )}
@@ -71,11 +84,11 @@ function SmallDeviceMenuSlider({ setSliderShow, pathName }) {
 
                         </div>
                         <ul className="gap-2 flex flex-col mt-5 ">
-                            <li
+                            <li onClick={closerHandler}
                                 className={` py-2 hover:bg-gray-100 rounded-sm flex justify-center items-center  font-medium text-balance uppercase ${pathName == '/Pages' ? "text-green" : ''}`}>
                                 <Link href="/Pages">Home</Link>
                             </li>
-                            <li
+                            <li onClick={closerHandler}
                                 className={` py-2  hover:bg-gray-100 rounded-sm flex justify-center items-center font-medium text-balance uppercase ${pathName == '/Pages/shop' ? "text-green" : ''}`}>
                                 <Link href="/Pages/shop">Shop</Link>
 
@@ -86,21 +99,20 @@ function SmallDeviceMenuSlider({ setSliderShow, pathName }) {
                                 <div className="absolute hidden  group-hover:block top-0 right-0">
                                     <ul
                                         className=" flex  w-36 bg-white px-5 shadow-2xl py-3 font-light text-sm flex-col flex-nowrap gap-2 rounded-sm">
-                                        <li><Link className="hover:text-[#7fad39]" href="/Pages/wishList">Wishlist</Link></li>
-                                        <li><Link className="hover:text-[#7fad39]" href="/Pages/Orders">Orders</Link>
-                                        </li>
-                                        <li><Link className="hover:text-[#7fad39]" href="/Pages/cart">Cart</Link></li>
-                                        <li><Link className="hover:text-[#7fad39]" href="/Pages/checkout">Checkout</Link></li>
-                                        <li><Link className="hover:text-[#7fad39]" href="/Pages/order">Order</Link></li>
+                                        <li onClick={closerHandler}><Link className="hover:text-green" href="/Pages/wishlist">Wishlist</Link></li>
+                                        <li onClick={closerHandler}><Link className="hover:text-green" href="/Pages/orders">Orders</Link>
+                                        </li >
+                                        <li onClick={closerHandler}><Link className="hover:text-green" href="/Pages/cart">Cart</Link></li>
+                                        <li onClick={closerHandler}><Link className="hover:text-green" href="/Pages/checkout">Checkout</Link></li>
                                     </ul>
                                 </div>
                             </li>
-                            <li
+                            <li onClick={closerHandler}
                                 className={`py-2 hover:bg-gray-100 rounded-sm flex justify-center items-center font-medium text-balance uppercase ${pathName == '/Pages/blog' ? "text-green" : ''}`}>
                                 <Link href="/Pages/blog">Blog</Link>
                             </li>
-                            <li
-                                className={`py-2 hover:bg-gray-100 rounded-sm flex justify-center items-center font-medium text-balance uppercase ${pathName == '/Pages/contact' ? "text-[#7fad39]" : ''}`}>
+                            <li onClick={closerHandler}
+                                className={`py-2 hover:bg-gray-100 rounded-sm flex justify-center items-center font-medium text-balance uppercase ${pathName == '/Pages/contact' ? "text-green" : ''}`}>
                                 <Link href="/Pages/contact">Contact</Link>
                             </li>
                         </ul>
@@ -115,12 +127,7 @@ function SmallDeviceMenuSlider({ setSliderShow, pathName }) {
                     </div>
                 </div>
             </div>
-            <div onClick={() => {
-                setActive(false)
-                setTimeout(() => {
-                    setSliderShow(false)
-                }, 500);
-            }} className="bg-gray-700 cursor-pointer absolute top-0 w-full h-full z-[-10] opacity-50">
+            <div onClick={closerHandler} className="bg-gray-700 cursor-pointer absolute top-0 w-full h-full z-[-10] opacity-50">
             </div>
         </section>
     )
