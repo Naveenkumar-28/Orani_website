@@ -1,24 +1,17 @@
 "use client"
-
 import { useSelector } from 'react-redux'
-import NotifyMessage from './NotifyMessage'
+import { NotifyMessage } from './NotifyMessage'
+import { RootState } from '@/app/redux/store';
 
-type NotifyItem = {
-    message: string;
-    id: Date;
-    type?: string;
-};
-
-function NotifyContainer() {
-    const notifyMessages: NotifyItem[] = useSelector((state: any) => state.NotifyMessage.messages) // Example structure
+export function NotifyContainer() {
+    const notifyMessages = useSelector((state: RootState) => state.NotifyMessage) // Example structure
 
     return (
-        <div className="fixed top-25 right-0 flex flex-col gap-4 z-[101]">
-            {notifyMessages?.map((msg) => (
+        <div className="fixed px-5 sm:bottom-10 bottom-5 right-0 flex flex-col gap-4 z-[101] justify-end sm:max-w-sm max-w-[25rem] w-full">
+            {notifyMessages?.messages?.map((msg) => (
                 <NotifyMessage key={msg.id.toString()} Message={msg.message} id={msg.id} type={msg?.type} />
             ))}
         </div>
     )
 }
 
-export default NotifyContainer

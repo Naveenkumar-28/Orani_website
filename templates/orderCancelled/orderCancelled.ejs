@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Order Cancelled</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .heading {
+            color: #ff4d4f;
+            text-align: center;
+        }
+
+        .summary-table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+
+        .summary-table td,
+        .summary-table th {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .summary-table td:last-child {
+            text-align: right;
+        }
+
+        .footer {
+            font-size: 12px;
+            color: gray;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .underline {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="heading">❌ Order Cancelled</h2>
+
+        <p>Hello <strong>
+                <%= customerName %>
+            </strong>,</p>
+        <p>Your order <strong>#<%= orderId %></strong> has been cancelled successfully.</p>
+
+        <h3 class="underline">Cancelled Items:</h3>
+        <table class="summary-table">
+            <tr>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Price</th>
+            </tr>
+            <% items.forEach(item=> { %>
+                <tr>
+                    <td style="text-align: center;">
+                        <%= item.name %>
+                    </td>
+                    <td style="text-align: center;">
+                        <%= item.quantity %>
+                    </td>
+                    <td style="text-align: center;">₹<%= item.price * item.quantity %>
+                    </td>
+                </tr>
+                <% }) %>
+        </table>
+
+        <h3 class="underline">Refund Summary:</h3>
+        <table class="summary-table">
+            <tr>
+                <td>Subtotal:</td>
+                <td style="text-align: end;">₹<%= subtotal %>
+                </td>
+            </tr>
+            <tr>
+                <td>Discount:</td>
+                <td style="text-align: end;">
+                    <%= discount %>
+                </td>
+            </tr>
+            <tr>
+                <td>Delivery Charges:</td>
+                <td style="text-align: end;">
+                    <%= deliveryCharge %>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Total Refund:</strong></td>
+                <td style="text-align: end;"><strong>₹<%= totalAmount %></strong></td>
+            </tr>
+        </table>
+
+        <p>The refunded amount will be processed to your original payment method within 5 to 7 business days.</p>
+        <p>If you have any questions, feel free to reach out to our support team.</p>
+
+        <p class="footer">© <%= year %>
+                <%= storeName %>. All rights reserved.</p>
+    </div>
+</body>
+
+</html>

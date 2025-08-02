@@ -1,0 +1,1 @@
+export const WEB_SITE_NAME = process.env.NEXT_PUBLIC_WEB_SITE_NAME

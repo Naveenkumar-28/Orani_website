@@ -1,87 +1,103 @@
-"use client"
-import { RemoveNotifyMessage } from '@/app/redux/slices/NotifyMessageSlice'
-import React, { Fragment, useEffect, useState } from 'react'
-import { IoIosCheckmarkCircleOutline, IoMdClose } from 'react-icons/io'
-import { PiWarningCircle } from 'react-icons/pi'
-import { useDispatch } from 'react-redux'
+"use client";
+import { RemoveNotifyMessage } from "@/app/redux/slices/NotifyMessageSlice";
+import React, { useEffect, useState } from "react";
+import { FaCircleCheck } from "react-icons/fa6";
+import { IoIosCheckmarkCircleOutline, IoMdClose } from "react-icons/io";
+import { MdCheckCircle } from "react-icons/md";
+import { PiWarningCircle } from "react-icons/pi";
+import { useDispatch } from "react-redux";
 
 type NotifyMessageProps = {
     Message: string;
     id: Date;
     type?: string;
-}
-function NotifyMessage({ Message, id, type = 'success' }: NotifyMessageProps) {
-    const [isActive, setIsActive] = useState(false)
-    const dispatch = useDispatch()
+};
+
+export function NotifyMessage({ Message, id, type = "success" }: NotifyMessageProps) {
+    const [isActive, setIsActive] = useState(false);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         // Delay to allow transition
         let enterTimeout = setTimeout(() => {
             setIsActive(true);
         }, 50)
+
         // Remove the notification after the duration
-        let removeTimeout = setTimeout(() => {
-            setIsActive(false)
+        const closeTimeout = setTimeout(() => {
+            setIsActive(false);
             setTimeout(() => {
-                dispatch(RemoveNotifyMessage(id))
-            }, 500)
-        }, 5000)
+                dispatch(RemoveNotifyMessage(id));
+            }, 500);
+        }, 5000);
+
         return () => {
             clearTimeout(enterTimeout);
-            clearTimeout(removeTimeout);
+            clearTimeout(closeTimeout);
         };
-    }, [id, dispatch])
+    }, [id, dispatch]);
 
     const getColor = (type: string) => {
         switch (type) {
             case "success":
-                return 'bg-green'
+                return "bg-emerald-500";
             case "error":
-                return 'bg-red-400'
+                return "bg-red-400";
             case "info":
-                return 'bg-sky-400'
+                return "bg-neutral-800";
             case "warning":
-                return 'bg-amber-500'
+                return "bg-amber-400";
             default:
-                return ''
+                return "";
         }
-    }
+    };
+
     const getIcon = (type: string) => {
         switch (type) {
             case "success":
-                return <IoIosCheckmarkCircleOutline />
+                return <MdCheckCircle />
             case "error":
-                return <PiWarningCircle />
+                return <PiWarningCircle />;
             case "info":
-                return <PiWarningCircle />
+                return <MdCheckCircle />
             case "warning":
-                return <PiWarningCircle />
+                return <PiWarningCircle />;
             default:
-                return ''
+                return "";
         }
-    }
+    };
 
     return (
-        <div className={` transform transition-all duration-500 ease-in-out ${isActive ? '-translate-x-5 opacity-100' : 'translate-x-full opacity-0'}  ${getColor(type)} duration-500 ease-in shadow-md  rounded-sm md:text-base text-[0.7rem] text-white`} >
-            <div className='flex items-center gap-3 px-2 py-2'>
-                <div className='flex items-center gap-2'>
-                    <div className='text-2xl'>
-                        {getIcon(type)}
-                    </div>
-                    <p className='font-light'>{Message}</p>
+        <div
+            className={`relative overflow-hidden transform transition-all self-end ease-in-out ${isActive ? "-translate-x-0 opacity-100" : "translate-x-full opacity-0"
+                } ${getColor(type)} duration-300 ease-in shadow-md rounded-md md:text-base text-sm text-white w-full`}
+        >
+            {/* Smooth timer bar at bottom */}
+            <div
+                className="absolute bottom-0 left-0 h-0.5 bg-white rounded-sm"
+                style={{
+                    animation: 'shrinkBar 5s linear forwards'
+                }}
+            />
+
+            <div className="flex items-center gap-3 px-3 py-2.5">
+                <div className="flex items-center gap-2 w-full">
+                    <div className="text-2xl text-white">{getIcon(type)}</div>
+                    <p className="text-white text-sm">{Message}</p>
                 </div>
-                <button onClick={() => {
-                    setIsActive(false)
-                    setTimeout(() => {
-                        dispatch(RemoveNotifyMessage(id))
-                    }, 500)
-                }} className='text-xl cursor-pointer '>
+                <button
+                    onClick={() => {
+                        setIsActive(false);
+                        setTimeout(() => {
+                            dispatch(RemoveNotifyMessage(id));
+                        }, 500);
+                    }}
+                    className="text-xl cursor-pointer text-white"
+                >
                     <IoMdClose />
                 </button>
             </div>
         </div>
-    )
+
+    );
 }
-
-
-export default NotifyMessage

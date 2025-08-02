@@ -25,12 +25,14 @@ export const parseData = async (req: NextRequest, options: { fileOptional?: bool
         if (!file) throw new Error('No file uploaded')
     }
     if (file && typeof file !== "string") {
-
         // Check file size (in bytes)
         const MAX_SIZE = fileSizeLimit * 1024 * 1024; // 1MB in bytes
         const fileSize = file.size;
 
         if (fileSize > MAX_SIZE) throw new Error('File size exceeds the 1MB limit')
+
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp']
+        if (!allowedTypes.includes(file.type)) throw new Error('Invalid file type. Only JPEG, PNG, and WEBP are allowed')
 
         const arrayBuffer = await file.arrayBuffer();
         buffer = Buffer.from(arrayBuffer)

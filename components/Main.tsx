@@ -1,8 +1,8 @@
 "use client"
 import React from 'react'
-import NotifyContainer from './NotifyContainer'
+import { NotifyContainer } from './NotifyContainer'
 
-function Main({ children }: Readonly<{
+export function Main({ children }: Readonly<{
     children: React.ReactNode
 }>) {
 
@@ -13,5 +13,3 @@ function Main({ children }: Readonly<{
         </div>
     )
 }
-
-export default Main

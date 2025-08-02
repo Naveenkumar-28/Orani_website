@@ -1,43 +1,96 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { jwtVerify } from 'jose'
 
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
-import { NextResponse } from 'next/server'
+const accessSecret = new TextEncoder().encode(process.env.ACCESS_TOKEN_SECRET_KEY);
 
-interface CustomSessionClaims {
-    metadata?: {
-        role?: string;
-    };
+const getrefreshToken = async (request: NextRequest) => {
+    const url = request.nextUrl.clone();
+    try {
+        const cookieHeader = request.headers.get('cookie') || '';
+        const refreshResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/refreshToken`, {
+            method: 'GET',
+            headers: {
+                cookie: cookieHeader
+            }
+        });
+
+        if (refreshResponse.ok) {
+            const data = await refreshResponse.json();
+            const newAccessToken = data.accessToken;
+            const role = data.role
+
+            const res = NextResponse.next();
+            res.cookies.set('accessToken', newAccessToken, {
+                httpOnly: true,
+                path: '/',
+                secure: process.env.NODE_ENV === 'production',
+            });
+            const path = url.pathname;
+            console.log({ path });
+
+            if (path.startsWith('/admin') && role !== 'admin') {
+                url.pathname = '/pages';
+                return NextResponse.redirect(url);
+            }
+            if (path.startsWith('/pages') && role !== 'user') {
+                url.pathname = '/admin/dashboard';
+                return NextResponse.redirect(url);
+            }
+            return res;
+        } else {
+            url.pathname = '/auth/login';
+            return NextResponse.redirect(url);
+        }
+    } catch {
+        url.pathname = '/auth/login';
+        return NextResponse.redirect(url);
+    }
 }
 
+export async function middleware(request: NextRequest) {
+    const accessToken = request.cookies.get('accessToken')?.value;
+    const refreshToken = request.cookies.get('refreshToken')?.value;
+    const url = request.nextUrl.clone();
 
-const isProtectedRoute = createRouteMatcher(['/admin(.*)', '/Pages/checkout(.*)', "/Pages/orders(.*)"])
-const isAdminCheck = createRouteMatcher(['/admin(.*)'])
-
-export default clerkMiddleware(async (auth, req) => {
-    if (req.nextUrl.pathname == '/') {
-        return NextResponse.redirect(new URL('/Pages', req.url))
-    }
-    const pathname = req.nextUrl.pathname
-    const isApi = pathname.startsWith('/api')
-
-    if (isProtectedRoute(req)) await auth.protect()
-    if (!isApi) {
-        const session = await auth()
-        if (isAdminCheck(req) && (session?.sessionClaims as CustomSessionClaims)?.metadata?.role !== 'admin') {
-            return NextResponse.redirect(new URL('/Pages', req.url))
+    if (!accessToken) {
+        if (!refreshToken) {
+            url.pathname = '/auth/login';
+            return NextResponse.redirect(url);
         }
-        if (!isAdminCheck(req) && (session?.sessionClaims as CustomSessionClaims)?.metadata?.role === 'admin') {
-            return NextResponse.redirect(new URL('/admin/dashboard', req.url))
-        }
+
+        // Try refresh token API
+        return await getrefreshToken(request)
     }
-    return NextResponse.next()
-})
+
+    // Verify access token and role based redirect
+    try {
+        const { payload } = await jwtVerify(accessToken, accessSecret) as any;
+
+        const path = url.pathname;
+        if (path.startsWith('/admin') && payload.role !== 'admin') {
+            url.pathname = '/pages';
+            return NextResponse.redirect(url);
+        }
+        if (path.startsWith('/pages') && payload.role !== 'user') {
+            url.pathname = '/admin/dashboard';
+            return NextResponse.redirect(url);
+        }
+
+        return NextResponse.next();
+
+    } catch {
+        // Token expired or invalid, try refresh token
+        if (refreshToken) {
+            return await getrefreshToken(request)
+        }
+
+        url.pathname = '/auth/login';
+        return NextResponse.redirect(url);
+    }
+}
 
 
 export const config = {
-    matcher: [
-        // Skip Next.js internals and all static files, unless found in search params
-        '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-        // Always run for API routes
-        '/(api|trpc)(.*)',
-    ],
-}
+    matcher: ['/admin/:path*', '/pages/orders', '/pages/checkout'],
+};
+

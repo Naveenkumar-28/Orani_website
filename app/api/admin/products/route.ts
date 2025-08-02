@@ -1,0 +1,58 @@
+import { connectToDatabase } from "@/lib/mongoDB"
+import { withAuth } from "@/lib/withAuth"
+import { ProductList } from "@/models"
+
+export const GET = withAuth(async (req) => {
+
+    const { searchParams } = new URL(req.url)
+    const page = parseInt(searchParams.get('page') || '') || 1
+    const search = searchParams.get('search')?.trim()
+    const limit = parseInt(searchParams.get('limit') || '') || 10
+    const category = searchParams.get('category')
+
+    console.log({ page, search, limit, category })
+
+    try {
+        await connectToDatabase();
+        let query: any = {}
+        if (search) query.name = { $regex: search, $options: "i" }
+        if (category) query.category = { $regex: category, $options: "i" }
+
+        const [result] = await ProductList.aggregate([
+            { $match: query },
+            {
+                $facet: {
+                    products: [
+                        { $sort: { createdAt: -1 } },
+                        { $skip: (page - 1) * limit },
+                        { $limit: limit },
+                        {
+                            $project: {
+                                rating: 0,
+                                userRatings: 0,
+                                createdAt: 0,
+                                updatedAt: 0,
+                                __v: 0,
+                                sold: 0
+                            }
+                        }
+                    ],
+                    total: [
+                        { $count: 'count' }
+                    ]
+                }
+            }
+        ])
+
+        const total = result?.total[0]?.count || 0
+        const products = result?.products || []
+        const totalPage = Math.ceil(total / limit)
+
+        return Response.json({ success: true, products, totalPage }, { status: 200 })
+
+    } catch (error) {
+        console.log("Error : ", (error as Error).message);
+
+        return Response.json({ message: "Something went wrong!", error: (error as Error).message }, { status: 500 })
+    }
+})

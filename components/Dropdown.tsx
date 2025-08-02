@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+"use client"
+import React, { useState } from 'react'
 import { IoIosArrowDown } from 'react-icons/io'
 
 type DropdownProps = {
@@ -11,9 +12,10 @@ type DropdownProps = {
     dropdownPosition?: string; // "top-10" or "bottom-10"
     dropdownOuterDiv?: string; // Additional class for outer div
     dropdownOuterWidth?: string; // Additional width for outer div
-    dropdownInputPadding?: string; // Additional padding for input field
+    dropdownInputPadding?: string;// Additional padding for input field
+    dropdownHeight?: string;
 }
-function Dropdown({
+export function Dropdown({
     icon,
     onClick,
     status,
@@ -21,9 +23,10 @@ function Dropdown({
     className = "text-gray-600",
     dropdownStyle = "",
     dropdownPosition = "bottom-10",
-    dropdownOuterDiv = "border-2 border-gray-400",
+    dropdownOuterDiv = "ring-2 ring-gray-300",
     dropdownOuterWidth = "w-full",
-    dropdownInputPadding = "px-5 py-3",
+    dropdownInputPadding = " py-3",
+    dropdownHeight = "h-14"
 }: DropdownProps) {
     const [isActive, setIsActive] = useState(false)
     const currentStatus = status
@@ -34,23 +37,21 @@ function Dropdown({
     }
 
     return (
-        <div className={`${dropdownOuterDiv}  relative focus-within:border-green flex items-center ${dropdownOuterWidth}  focus:border-green  pe-5 rounded-sm `}>
+        <div className={`${dropdownOuterDiv} ${dropdownHeight} relative focus-within:ring-green flex items-center ${dropdownOuterWidth}  focus:border-green  px-5 rounded-sm `}>
             <input type="text"
                 value={currentStatus || 'Please Select'}
                 onFocus={() => setIsActive(true)}
                 onBlur={() => setTimeout(() => setIsActive(false), 300)}
                 readOnly
-                className={`${className} flex w-full cursor-auto items-center outline-none ${dropdownInputPadding} capitalize  `} />
+                className={`${className} text-sm md:text-base flex w-full cursor-auto items-center outline-none ${dropdownInputPadding} capitalize  `} />
             {icon ? icon : <IoIosArrowDown className='text-gray-400 ' />}
             {isActive && (
-                <div className={`absolute bg-white ${dropdownPosition} shadow-md left-0 z-20 w-full border border-gray-300 rounded-md overflow-hidden  ${dropdownStyle}`}>
+                <div className={`absolute bg-white ${dropdownPosition} shadow-md left-0 z-20 w-full ring-2 ring-gray-100  rounded-md overflow-hidden  ${dropdownStyle}`}>
                     {renderItems?.map((status, index) => {
-                        return <div key={index} onClick={() => statusHandler(status)} className={` ${status?.toLowerCase() == currentStatus?.toLowerCase() ? "bg-green text-white" : "hover:bg-gray-400 hover:text-white"} capitalize py-1 px-5 cursor-pointer duration-200 `}>{status}</div>
+                        return <div key={index} onClick={() => statusHandler(status)} className={` ${status?.toLowerCase() == currentStatus?.toLowerCase() ? "bg-green text-white" : "hover:bg-gray-100"} capitalize py-1 px-5 cursor-pointer duration-200 text-sm md:text-base md:py-2`}>{status}</div>
                     })}
                 </div>
             )}
         </div>
     )
 }
-
-export default Dropdown

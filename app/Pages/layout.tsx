@@ -1,63 +1,57 @@
 "use client"
-import { MdEmail } from "react-icons/md";
-import Footer from "@/components/Footer";
-import SmallDeviceMenuSlider from "@/components/SmallDeviceMenuSlider";
-import { useEffect, useState } from "react";
-import Header from "@/components/Header";
-import {
-    SignInButton,
-    SignOutButton,
-    SignedIn,
-    SignedOut
-} from '@clerk/nextjs'
-
 import React from 'react'
+import { MdEmail } from "react-icons/md";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { usePathname } from "next/navigation";
-import { addCartList } from "@/app/redux/slices/CartSlice";
-import { CartType, WishListType } from "../types";
 import { FaTruckFast } from "react-icons/fa6";
 import { IoIosCall } from "react-icons/io";
-import { addWishList } from "../redux/slices/wishListSlice";
+import { Footer, Header } from "./components";
+import { AppDispatch } from "../redux/store";
+import { useUserData } from "@/hooks/useUserData";
+import { getUserdetails } from "../redux/api";
+import { getDbCartList, setTolocalStorageCartList } from './(public_pages)/cart/redux';
+import { getDbWishList, setTolocalStorageWishList } from './(public_pages)/wishlist/redux';
+import { useResetBodyOnPathChange } from '@/hooks/useResetBodyOnPathChange';
 
 export default function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const pathName = usePathname()
-    const [SliderShow, setSliderShow] = useState(false)
-    const dispatch = useDispatch()
 
+    const dispatch = useDispatch<AppDispatch>()
+    const { isLoading, isSignedIn, user } = useUserData()
 
-    useEffect(() => {
-        const raw = localStorage.getItem("CartList")
-        const parseCartList: CartType[] = raw ? JSON.parse(raw) : []
-        if (parseCartList) {
-
-            parseCartList.map((product) => dispatch(addCartList(product)))
-        }
-
-    }, [])
+    useResetBodyOnPathChange()
 
     useEffect(() => {
-        const wishList = localStorage.getItem("WishList")
-        const parseWishList: WishListType[] = wishList ? JSON.parse(wishList) : []
-        if (parseWishList) {
+        const loadUser = async () => {
+            if (!user) {
+                await dispatch(getUserdetails()).unwrap();
+            }
+        };
+        loadUser();
+    }, []);
 
-            parseWishList.map((product) => dispatch(addWishList(product)))
+    useEffect(() => {
+        if (!isLoading) {
+            if (isSignedIn) {
+                dispatch(getDbCartList());
+                dispatch(getDbWishList())
+            } else {
+                dispatch(setTolocalStorageCartList());
+                dispatch(setTolocalStorageWishList());
+            }
         }
-    }, [])
+    }, [isLoading, isSignedIn]);
+
 
     return (
         <>
 
-            {/* Mobile Slider  */}
-            {SliderShow && <SmallDeviceMenuSlider pathName={pathName} setSliderShow={setSliderShow} />}
-
             {/* Header */}
-            <header className="lg:h-8 w-full bg-[#7fad39] text-white  hidden lg:block ">
-                <div className="lg:flex justify-between items-center h-full lg:container   mx-auto  lg:px-20 container md:px-20 px-10 2xl:px-52">
+            <header className="relative lg:h-8 w-full z-[99] bg-green text-white  hidden lg:block ">
+                <div className="lg:flex justify-between items-center h-full mediaQuary">
                     <div className="font-semiblod uppercase text-[12px] flex items-center gap-1">
                         <MdEmail className="size-4" />
 
@@ -75,10 +69,8 @@ export default function RootLayout({
 
                     </div>
                 </div>
-
-
             </header>
-            <Header pathName={pathName} setSliderShow={setSliderShow} />
+            <Header />
             {children}
             {/* Footer Section */}
             <Footer />

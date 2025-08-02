@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Message</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #7fad39;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2d3748;
+            font-size: 20px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        td.label {
+            font-weight: bold;
+            color: #2d3748;
+            padding: 10px;
+        }
+
+        td.value {
+            color: #4a5568;
+            padding: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #a0aec0;
+            font-size: 0.9em;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>oragi</h1>
+        <h2>📩 New Contact Form Submission</h2>
+
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="label">Name:</td>
+                <td class="value">
+                    <%= name %>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">Email:</td>
+                <td class="value">
+                    <%= email %>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">Subject:</td>
+                <td class="value">
+                    <%= subject %>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">Message:</td>
+                <td class="value">
+                    <%= message %>
+                </td>
+            </tr>
+        </table>
+
+        <p class="footer">
+            This message was sent via the contact form on your website.
+        </p>
+    </div>
+</body>
+
+</html>

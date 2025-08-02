@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useRef } from 'react';
 
 export function useDebounceEffect(effect: () => void, deps: any[], delay: number) {

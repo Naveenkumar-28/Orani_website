@@ -32,54 +32,34 @@ html {
 
 }
 
-.notify-show {
-  animation: notifyshow 0.2s ease-in-out forwards;
-}
-
-@keyframes notifyshow {
-  0% {
-    transform: translateX(100%);
+@layer components {
+  .avater {
+    @apply size-9 text-xl rounded-full flex justify-center items-center uppercase text-white cursor-pointer hover:ring-2 duration-200 ring-gray-300
   }
 
-  100% {
-    transform: translateX(0);
+  .btn {
+    @apply text-sm font-normal text-gray-600 outline-none rounded-sm ps-5 ring-1 ring-gray-200 w-full h-14
+  }
+
+  .input {
+    @apply text-sm font-normal text-gray-600 outline-none rounded-sm px-4 md:px-5 ring-1 ring-gray-200 w-full md:h-14 h-12 placeholder:text-xs md:placeholder:text-sm
+  }
+
+  .userDetailsBtn {
+    @apply cursor-pointer flex justify-start items-center rounded-sm py-2 gap-2 px-5 w-full text-gray-500 font-light disabled:text-gray-400 not-disabled:hover:bg-green not-disabled:hover:text-white disabled:cursor-not-allowed
+  }
+
+  .mediaQuary {
+    @apply container lg:px-20 mx-auto px-5 md:px-20 2xl:px-52
   }
 }
 
-.animate-timer {
-  animation: animateTimer 5s linear forwards;
-  width: 100%;
-}
+@keyframes shrinkBar {
+  from {
+    width: 100%;
+  }
 
-@keyframes animateTimer {
-  100% {
+  to {
     width: 0%;
   }
 }
-
-/* .notify-hide {
-  animation: notifyHide 0.2s ease-in-out forwards;
-} */
-
-/* @keyframes notifyHide {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(100%);
-  }
-} */
-
-
-/* .notify-show {
-  opacity: 1;
-  transform: translateX(-100px);
-  transition: all 0.3s ease;
-} */
-
-/* .notify-hide {
-  opacity: 1;
-  transform: translateX(100%);
-  transition: all 0.3s ease;
-} */
