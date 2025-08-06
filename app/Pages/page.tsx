@@ -8,6 +8,7 @@ export default function Home() {
 
         <div>
 
+            {/* Hero Banner with Category Selector  */}
             <HeroBannerWithCategorySelector />
 
             {/* Categorie Slider  */}
