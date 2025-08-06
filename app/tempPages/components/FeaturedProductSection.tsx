@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { ProductCard } from "./ProductCard"
 import { AppDispatch, RootState } from '@/app/redux/store';
-import { fetchProductList } from '@/app/pages/(public_pages)/shop/redux';
+import { fetchProductList } from '@/app/tempPages/(public_pages)/shop/redux';
 import { ProductCardSkeleton } from './ProductCardSkeleton';
 
 export function FeaturedProductSection() {

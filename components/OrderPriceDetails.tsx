@@ -1,4 +1,4 @@
-import { OrderType } from '@/app/pages/(protected_pages)/orders/types'
+import { OrderType } from '@/app/tempPages/(protected_pages)/orders/types'
 import React from 'react'
 
 export function OrderPriceDetails({ order }: { order: OrderType }) {

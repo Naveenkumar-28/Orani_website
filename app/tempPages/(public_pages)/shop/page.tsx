@@ -2,7 +2,7 @@
 import { MenuSection } from '@/components'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { ProductCard, Pagination, ProductCardSkeleton } from "@/app/pages/components"
+import { ProductCard, Pagination, ProductCardSkeleton } from "@/app/tempPages/components"
 import { useRouter, useSearchParams } from 'next/navigation';
 import { fetchProductList } from './redux';
 import { AppDispatch, RootState } from '@/app/redux/store';

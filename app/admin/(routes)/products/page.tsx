@@ -7,7 +7,7 @@ import { RiFilter3Line } from 'react-icons/ri';
 import { UploadNewProduct, RemoveCard, EditProduct, ProductCardSkeleton } from "./components";
 import { IoCloseCircle } from 'react-icons/io5';
 import { Dropdown, FullScreenLoader, LoadingIndicator } from '@/components/';
-import { Pagination } from '@/app/pages/components';
+import { Pagination } from '@/app/tempPages/components';
 import { useDebounceEffect } from '@/hooks';
 import { AppDispatch, RootState } from '@/app/redux/store';
 import { getAdminProducts } from './redux';

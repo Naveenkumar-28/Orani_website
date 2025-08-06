@@ -1,4 +1,4 @@
-import { usePricetotal } from '@/app/pages/(protected_pages)/checkout/hooks'
+import { usePricetotal } from '@/app/tempPages/(protected_pages)/checkout/hooks'
 import { RootState } from '@/app/redux/store'
 import { useSelector } from 'react-redux'
 import { CardTotalSkeleton } from './CardTotalSkeleton'

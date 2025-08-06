@@ -5,17 +5,17 @@ import {
     suggestionReducer,
     userReducer,
 } from "./slices";
-import { orderListReducer } from "../pages/(protected_pages)/orders/redux";
-import { ProductReducer } from "../pages/(public_pages)/shop/redux";
+import { orderListReducer } from "../tempPages/(protected_pages)/orders/redux";
+import { ProductReducer } from "../tempPages/(public_pages)/shop/redux";
 import { AdminOrderListReducer } from "../admin/(routes)/orders/redux";
-import { AddressReducer } from "../pages/(protected_pages)/checkout/redux";
-import { specificProductReducer } from "../pages/(public_pages)/shop/[id]/redux";
-import { cartListReducer } from "../pages/(public_pages)/cart/redux";
-import { wishListReducer } from "../pages/(public_pages)/wishlist/redux/slice";
-import { blogReducer } from "../pages/(public_pages)/blog/redux";
+import { AddressReducer } from "../tempPages/(protected_pages)/checkout/redux";
+import { specificProductReducer } from "../tempPages/(public_pages)/shop/[id]/redux";
+import { cartListReducer } from "../tempPages/(public_pages)/cart/redux";
+import { wishListReducer } from "../tempPages/(public_pages)/wishlist/redux/slice";
+import { blogReducer } from "../tempPages/(public_pages)/blog/redux";
 import { adminProductReducer, UploadProductReducer } from "../admin/(routes)/products/redux";
 import { OverallSummaryReducer } from "../admin/(routes)/dashboard/redux/slice";
-import { contactReducer } from "../pages/(public_pages)/contact/redux/slice";
+import { contactReducer } from "../tempPages/(public_pages)/contact/redux/slice";
 import { authLogout } from "./api";
 
 const appReducer = combineReducers({
