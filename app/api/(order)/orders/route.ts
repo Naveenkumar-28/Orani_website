@@ -10,10 +10,10 @@ export const GET = withAuth(async (req, _, user) => {
     console.log({ page, limit });
     try {
         await connectToDatabase()
-        const currentUser = await User.findOne({ _id: user._id })
-        if (!currentUser) return Response.json({ message: "User not found" }, { status: 404 })
 
-        console.log({ currentUser });
+        const currentUser = await User.findOne({ _id: user._id })
+
+        if (!currentUser) return Response.json({ message: "User not found" }, { status: 404 })
 
         const [result] = await Order.aggregate([
             {
@@ -49,7 +49,6 @@ export const GET = withAuth(async (req, _, user) => {
             }
 
         ])
-        console.log([result]);
 
         const orders = result.orders || []
         const totalPage = Math.ceil((result.totalCount[0]?.count || 0) / limit) || 0
@@ -57,9 +56,9 @@ export const GET = withAuth(async (req, _, user) => {
         return Response.json({ success: true, message: 'Order fetched successfully', orders, totalPage }, { status: 200 });
 
     } catch (error) {
-        console.log((error as Error)?.message)
-        console.log(error)
-        return Response.json({ success: false, message: 'Somthing went wrong!' }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ success: false, error: err.message, message: 'Somthing went wrong!' }, { status: 500 })
     }
 
 })

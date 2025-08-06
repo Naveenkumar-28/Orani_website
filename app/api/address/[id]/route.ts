@@ -4,7 +4,7 @@ import { withAuth } from "@/lib/withAuth"
 import { Address } from "@/models"
 import * as Yup from 'yup'
 
-export const DELETE = withAuth(async (req, { params }) => {
+export const DELETE = withAuth(async (_, { params }) => {
     const { id } = await params
 
     try {
@@ -12,9 +12,10 @@ export const DELETE = withAuth(async (req, { params }) => {
         const result = await Address.findByIdAndDelete(id)
         if (!result) return Response.json({ message: "Address remove failed", success: false }, { status: 400 })
         return Response.json({ success: true, message: "Addresses removed successfully" }, { status: 200 })
-    } catch (err) {
-        console.error("Unexpected Error:", err)
-        return Response.json({ success: false, message: "Somthing went wrong!", error: (err as Error).message }, { status: 500 })
+    } catch (error) {
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ success: false, message: "Address remove failed", error: err.message }, { status: 500 })
     }
 })
 
@@ -63,24 +64,24 @@ export const PATCH = withAuth(async (req, { params }, user) => {
             },
             { status: 200 }
         );
-    } catch (err) {
-        if (err instanceof Yup.ValidationError) {
+    } catch (error) {
+        if (error instanceof Yup.ValidationError) {
             return Response.json(
                 {
                     success: false,
-                    message: err.errors[0] || 'Validation failed',
+                    message: error.errors[0] || 'Validation failed',
                     error: 'Validation failed'
                 },
                 { status: 400 }
             );
         }
-
-        console.error('Unexpected Error:', err);
+        const err = error as Error
+        console.log(err.message);
         return Response.json(
             {
                 success: false,
-                message: 'Something went wrong!',
-                error: (err as Error).message
+                message: 'Address update failed',
+                error: err.message
             },
             { status: 500 }
         );

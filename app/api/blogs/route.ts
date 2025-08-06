@@ -90,14 +90,16 @@ export const GET = async (req: Request) => {
             ...(!search && {
                 category: data.categoryList,
                 recentBlogs: data.recentBlogs
-            })
+            }),
+            message: "Blogs fetched succussfully"
         }, { status: 200 })
     } catch (error) {
-        console.log((error as Error)?.message);
+        const err = error as Error
+        console.log(err.message);
         return Response.json({
             success: false,
-            message: "Something went wrong!",
-            error: (error as Error)?.message
+            error: err.message,
+            message: "Blogs fetched failed",
         }, { status: 500 })
     }
 }

@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/app/redux/store';
-import { BusinessOverview, OrderSummaryChart, OverAllReviews, OverallSummmaryLoadingSkeleton, TopProducts } from './components';
+import { BusinessOverview, OrderSummaryChart, OverAllReviews, OverallSummmaryLoadingSkeleton, RecentOrders, TopProducts } from './components';
 import { getOverallSummary } from './redux';
 
 function Dashboard() {
@@ -19,8 +19,8 @@ function Dashboard() {
         <>
             {
                 !loading ? (
-                    <div className=' px-5 flex gap-5 flex-col'>
-                        <div className='flex sm:gap-5 gap-2 mb-10 xl:flex-row flex-col'>
+                    <div className='px-5 flex sm:gap-5 gap-2 flex-col mb-10'>
+                        <div className='flex sm:gap-5 gap-2 xl:flex-row flex-col'>
                             <div className='xl:w-8/12 flex flex-col sm:gap-5 gap-2 lg:max-h-full'>
                                 <BusinessOverview />
                                 <OrderSummaryChart />
@@ -30,7 +30,9 @@ function Dashboard() {
                                 <OverAllReviews />
                             </div>
                         </div>
-
+                        <div >
+                            <RecentOrders />
+                        </div>
                     </div>
                 ) : (
                     <OverallSummmaryLoadingSkeleton />

@@ -13,8 +13,10 @@ export const DELETE = withAuth(async (req: Request, { params }, user) => {
         wishList.items = wishList.items.filter((p: { productId: string }) => p.productId.toString() !== id)
         await wishList.save()
 
-        return Response.json({ success: true, productId: id, message: 'Item Removed successfully' }, { status: 200 })
+        return Response.json({ success: true, productId: id, message: 'Wish item Removed successfully' }, { status: 200 })
     } catch (error) {
-        return Response.json({ success: false, message: 'Somthing went wrong!', error: (error as Error).message }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ success: false, message: 'Wish item Remove failed', error: err.message }, { status: 500 })
     }
 })

@@ -8,12 +8,13 @@ import { createSendMessage } from "@/utils/sendMessage/createSendMessage";
 import { CartReset } from "@/app/pages/(public_pages)/cart/redux";
 import { AppDispatch, RootState } from "@/app/redux/store";
 import { WEB_SITE_NAME } from "@/constants";
-import { fetchOrders, resetOrders } from "../../orders/redux";
+import { resetOrders } from "../../orders/redux";
 
 
 const usePaymentHandler = () => {
     const { user } = useUserData()
     const router = useRouter()
+    const [isPaymentLoading, setIsPaymentLoading] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const { cartList } = useSelector((state: RootState) => state.CartItems)
     const dispatch = useDispatch<AppDispatch>()
@@ -61,8 +62,7 @@ const usePaymentHandler = () => {
                 description: "Test Transaction",
                 order_id: order?.id,
                 handler: async function (res: any) {
-                    console.log({ res });
-
+                    setIsPaymentLoading(true)
                     try {
                         const response = await api.post(`/completeOrder`, res)
                         if (response.data) {
@@ -75,7 +75,8 @@ const usePaymentHandler = () => {
                     } catch (error) {
                         console.log((error as Error).message)
                         sendMessage.error('Payment failed')
-
+                    } finally {
+                        setIsPaymentLoading(false)
                     }
                 },
                 prefill: {
@@ -86,12 +87,15 @@ const usePaymentHandler = () => {
                 // Handling cancellation
                 modal: {
                     ondismiss: async function () {
+                        setIsPaymentLoading(true)
                         try {
                             // Optionally notify backend about cancellation
                             await api.post(`/orderCancel`, { orderId: order?.id });
                             sendMessage.error("Payment Cancelled")
                         } catch (error) {
                             console.error("Error during cancellation:", (error as Error).message);
+                        } finally {
+                            setIsPaymentLoading(false)
                         }
                     }
                 }
@@ -107,7 +111,7 @@ const usePaymentHandler = () => {
         }
 
     };
-    return { handlePayment, isLoading }
+    return { handlePayment, isLoading, isPaymentLoading }
 }
 
 export { usePaymentHandler }

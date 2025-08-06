@@ -40,8 +40,8 @@ export const POST = withAuth(async (req: Request, _, user) => {
 
         return Response.json({ success: true, products: getProductIds, message: 'WishList merged successfully' }, { status: 200 })
     } catch (error) {
-        console.log(error);
-
-        return Response.json({ success: false, message: 'Somthing went wrong!', error: (error as Error).message }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ success: false, message: 'WishList merge failed', error: err.message }, { status: 500 })
     }
 })

@@ -16,6 +16,8 @@ export const DELETE = withAuth(async (req: Request, { params }, user) => {
 
         return Response.json({ success: true, message: 'Removed successfully' }, { status: 200 })
     } catch (error) {
-        return Response.json({ success: false, message: 'Somthing went wrong!', error: (error as Error).message }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ success: false, message: 'cart item remove failed', error: err.message }, { status: 500 })
     }
 })

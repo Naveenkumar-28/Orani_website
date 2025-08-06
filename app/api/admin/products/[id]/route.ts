@@ -78,8 +78,8 @@ export const PATCH = withAuth(async (req, { params }) => {
         return Response.json({ success: true, message: "Product updated successfully", updatedProduct: product }, { status: 200 })
 
     } catch (error) {
-        console.log((error as Error).message);
-
-        return Response.json({ success: false, error, message: "Somthing went wrong!" }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ success: false, error: err.message, message: "Product update failed" }, { status: 500 })
     }
 })

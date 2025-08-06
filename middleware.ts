@@ -13,20 +13,22 @@ const getrefreshToken = async (request: NextRequest) => {
                 cookie: cookieHeader
             }
         });
-
         if (refreshResponse.ok) {
             const data = await refreshResponse.json();
             const newAccessToken = data.accessToken;
             const role = data.role
-
+            const localhost = request.headers.get('host')?.startsWith('localhost')
             const res = NextResponse.next();
+
             res.cookies.set('accessToken', newAccessToken, {
                 httpOnly: true,
                 path: '/',
-                secure: process.env.NODE_ENV === 'production',
+                secure: process.env.NODE_ENV === 'production' && !localhost,
+                sameSite: 'lax',
+                maxAge: 60 * 15,
             });
+
             const path = url.pathname;
-            console.log({ path });
 
             if (path.startsWith('/admin') && role !== 'admin') {
                 url.pathname = '/pages';

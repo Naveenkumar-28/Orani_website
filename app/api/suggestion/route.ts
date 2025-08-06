@@ -39,10 +39,11 @@ export const GET = async (req: Request) => {
             splittedName: product.name.split(new RegExp(`(${search})`, 'gi')), // Splitting name
         }))
 
-        return Response.json({ success: true, suggestionProducts: splittedProducts }, { status: 200 })
+        return Response.json({ message: "Suggestion fetched successfully", success: true, suggestionProducts: splittedProducts }, { status: 200 })
 
     } catch (error) {
-        console.log("Error : ", (error as Error).message);
-        return Response.json({ success: false, error, message: "Something went wrong!" }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ success: false, error: err.message, message: "Suggestion fetched failed" }, { status: 500 })
     }
 }

@@ -20,8 +20,8 @@ export const POST = async (req: Request) => {
 
         return Response.json({ success: true, message: 'Message send successfully!' }, { status: 200 })
     } catch (error) {
-        console.log((error as Error).message);
-
-        return Response.json({ success: false, error, message: "Message send failed!" }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ success: false, error: err.message, message: "Message send failed!" }, { status: 500 })
     }
 }

@@ -27,14 +27,14 @@ function Cart() {
         <>
             <MenuSection name={'cart'} />
             <div className="container lg:px-20 mx-auto md:px-20 sm:px-5 px-5 2xl:px-52 mb-30 text-gray-800">
-                {cartList.length > 0 && <div
+                {cartList.length > 0 && (<div
                     className="bg-green hidden lg:flex xl:h-20 lg:h-18 rounded-sm text-white lg:text-lg font-medium items-center justify-center gap-2">
                     <div className="lg:w-3/12 w-4/12 justify-center items-center flex xl:text-base text-sm"> </div>
                     <div className="lg:w-3/12 w-4/12 sm:justify-center sm:items-center flex xl:text-base text-sm">Product name</div>
                     <div className="lg:w-2/12 justify-center items-center lg:flex hidden xl:text-base text-sm">Price</div>
                     <div className="lg:w-2/12 w-2/12 justify-center items-center flex xl:text-base text-sm">Quantity</div>
                     <div className="lg:w-2/12 w-2/12 justify-center items-center flex xl:text-base text-sm  ">Total</div>
-                </div>}
+                </div>)}
                 <div className="w-full mb-20">
                     {!isSkeletonLoading ? (
                         <>
@@ -48,6 +48,14 @@ function Cart() {
                         </>
                     ) : (
                         <>
+                            <div
+                                className="bg-green hidden lg:flex xl:h-20 lg:h-18 rounded-sm text-white lg:text-lg font-medium items-center justify-center gap-2">
+                                <div className="lg:w-3/12 w-4/12 justify-center items-center flex xl:text-base text-sm"> </div>
+                                <div className="lg:w-3/12 w-4/12 sm:justify-center sm:items-center flex xl:text-base text-sm">Product name</div>
+                                <div className="lg:w-2/12 justify-center items-center lg:flex hidden xl:text-base text-sm">Price</div>
+                                <div className="lg:w-2/12 w-2/12 justify-center items-center flex xl:text-base text-sm">Quantity</div>
+                                <div className="lg:w-2/12 w-2/12 justify-center items-center flex xl:text-base text-sm  ">Total</div>
+                            </div>
                             {Array.from({ length: 5 }).map((_, index) => (
                                 <CartCardSkeleton key={index} />
                             ))}

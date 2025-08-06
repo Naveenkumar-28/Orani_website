@@ -20,12 +20,14 @@ export const POST = withAuth(async (req, _, user) => {
         await currentUser.save()
         const { _id, name, imageUrl, email, role } = currentUser
         const userData = { _id, name, imageUrl, email, role }
+
         return Response.json({ success: true, message: "Profile image changed successfully", user: userData });
 
     } catch (error) {
-        console.error('Upload error:', error);
+        const err = error as Error
+        console.log(err.message);
         return Response.json(
-            { success: false, message: "Profile pic upload failed", error: (error as Error).message },
+            { success: false, message: "Profile pic upload failed", error: err.message },
             { status: 500 }
         );
     }

@@ -213,11 +213,13 @@ export const GET = async () => {
         });
 
     } catch (error) {
-        console.error('Error fetching order statistics:', error);
+        const err = error as Error
+        console.log(err.message);
         return Response.json(
             {
                 success: false,
-                message: error instanceof Error ? error.message : 'Something went wrong while fetching order statistics'
+                error: err.message,
+                message: 'Order statistics fetched failed',
             },
             { status: 500 }
         );

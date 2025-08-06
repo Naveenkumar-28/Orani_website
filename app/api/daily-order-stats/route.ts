@@ -40,8 +40,9 @@ export const GET = async () => {
         }
         return Response.json({ success: true, message: "Calculated orders statistics report successfully" }, { status: 200 })
     } catch (error) {
-        console.log((error as Error).message);
-        return Response.json({ message: "Something went wrong!", error: (error as Error).toString(), success: false }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ message: "Statistics report run failed", error: err.message, success: false }, { status: 500 })
     }
 
 }

@@ -89,7 +89,7 @@ export function SpecificProduct({ product }: { product: ProductType }) {
                                 <StarRating initialValue={0} className='text-base xl:text-lg' />
                             </div>
                         )}
-                        {product?.sold > 0 && <div className="flex justify-center items-center gap-1 text-gray-400 xl:text-base text-sm">
+                        {product?.sold > 0 && <div className="flex justify-center items-center gap-1 text-neutral-700 xl:text-base text-sm">
                             <p >Sold :</p>
                             <p >{product?.sold}<span className='text-sm'>kg</span></p>
                         </div>}

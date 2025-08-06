@@ -43,8 +43,10 @@ export const GET = withAuth(async (req: Request, _, user) => {
 
         }
 
-        return Response.json({ success: true, products: updatedProducts, message: 'cartList fetched dataBase successfully' }, { status: 200 })
+        return Response.json({ success: true, products: updatedProducts, message: 'Cart items fetched successfully' }, { status: 200 })
     } catch (error) {
-        return Response.json({ success: false, message: 'Somthing went wrong!', error: (error as Error).message }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ success: false, message: 'Cart items fetched failed ', error: (error as Error).message }, { status: 500 })
     }
 })

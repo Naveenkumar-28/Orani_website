@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { HiOutlineMenuAlt1 } from 'react-icons/hi'
 import { IoClose } from 'react-icons/io5'
 import { HeaderActions } from './HeaderActions'
@@ -11,28 +11,27 @@ export function SmallDeviceMenu() {
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
     const [isActive, setActive] = useState(false)
     const [isOpen, setIsOpen] = useState(false)
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
     const closeTopDrawerHandler = useCallback(() => {
-        let timeOut
-        if (timeOut) clearTimeout(timeOut)
         setActive(false)
-        timeOut = setTimeout(() => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current)
+        timeoutRef.current = setTimeout(() => {
             setDrawerOpen(false)
         }, 500)
     }, [])
 
     const openTopDrawerHandler = useCallback(() => {
-        let timeOut
-        if (timeOut) clearTimeout(timeOut)
         setDrawerOpen(true)
-        timeOut = setTimeout(() => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current)
+        timeoutRef.current = setTimeout(() => {
             setActive(true)
         }, 50)
     }, [])
 
-    const onClickHandler = () => {
+    const onClickHandler = useCallback(() => {
         setIsOpen(true)
-    }
+    }, [])
 
     return (
         <header className='lg:hidden select-none sticky top-0 z-[99] shadow-lg bg-white'>
@@ -54,7 +53,7 @@ export function SmallDeviceMenu() {
                 </div>
 
                 {/* Search Input Field */}
-                {isOpen && <div className='bg-white h-full w-full fixed top-0 left-0'>
+                {isOpen && <div className='bg-white h-full w-full fixed top-0 left-0 z-50'>
                     <SmallDeviceSearchInputField setIsOpen={setIsOpen} />
                 </div>}
 

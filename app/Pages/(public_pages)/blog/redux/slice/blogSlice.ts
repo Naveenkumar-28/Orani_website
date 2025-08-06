@@ -51,7 +51,7 @@ const blogSlice = createSlice({
             state.blogs = blogs
             state.totalPage = totalPage
 
-            if (page || 1 == 1 && !search) {
+            if ((page || 1) == 1 && !search) {
                 if (!action.payload?.category && !action.payload?.recentBlogs) return
                 const { category, recentBlogs } = action.payload
                 state.categoryList = category

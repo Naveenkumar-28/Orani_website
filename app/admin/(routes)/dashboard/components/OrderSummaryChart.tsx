@@ -13,7 +13,7 @@ export function OrderSummaryChart() {
     };
 
     return (
-        <div className='w-full ring-1 shadow-md bg-white ring-gray-200 rounded-md px-5 py-5 gap-2 sm:gap-6 flex flex-col lg:min-h-9/12'>
+        <div className='w-full ring-1 shadow-md bg-white ring-gray-200 rounded-md px-5 py-5 gap-2 sm:gap-6 flex flex-col lg:max-h-9/12'>
             <div className='flex justify-between flex-col sm:flex-row gap-5'>
                 <div className='flex flex-col gap-2 sm:w-6/12'>
                     <h1 className='font-semibold sm:text-xl text-lg'>Order History</h1>

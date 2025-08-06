@@ -63,7 +63,8 @@ export function OrderDetailsModel({
             bodyOverflowHandler(false)
             closerHandler(null)
         }, 400);
-    }, [])
+    }, [bodyOverflowHandler, closerHandler])
+
 
     return (
         <>
@@ -86,15 +87,18 @@ export function OrderDetailsModel({
                         {/* Price details  */}
                         <OrderPriceDetails order={order} />
 
-                        {editMode && order?.paymentStatus && (
-                            <>
+                        {editMode &&
+                            order?.paymentStatus &&
+                            order.orderStatus.toLowerCase() !== "cancelled" &&
+                            order.orderStatus.toLowerCase() !== "delivered" && (
+
                                 <div className='px-5 mb-5 flex flex-col gap-5 '>
-                                    <Dropdown dropdownHeight='h-12' dropdownPosition='bottom-12' status={orderStatus || order?.orderStatus} renderItems={["pending", "confirmed", "shipping", "delivered", "rejected"]} onClick={setOrderStatus} />
+                                    <Dropdown dropdownHeight='h-12' dropdownPosition='bottom-12' status={orderStatus || order?.orderStatus} renderItems={["pending", "confirmed", "shipping", "delivered", "cancelled"]} onClick={setOrderStatus} />
 
                                     <Button loading={loading} disabled={loading} loadingContent='Updating . . .' onClick={() => OrderStatusUpdateHandler(order?._id)} title={"Update Order Status"} />
                                 </div>
-                            </>
-                        )}
+
+                            )}
                     </section>
                 </div>
                 <div onClick={sliderCloserHandler} className='bg-neut h-full w-full absolute -z-1 bg-black/50 cursor-pointer'></div>

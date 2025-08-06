@@ -7,7 +7,7 @@ export function OrderPriceDetails({ order }: { order: OrderType }) {
             <h1 className='font-medium text-base underline underline-offset-2'>Price Details :</h1>
             <div className='flex flex-col gap-4'>
                 <div className='flex justify-between items-center'>
-                    <h1 className='font-normal text-neutral-800'>Selling price <span className='text-xs'>{`(${order.items.length} ${order.items.length > 0 ? "items" : "item"})`}</span></h1>
+                    <h1 className='font-normal text-neutral-800'>Selling price <span className='text-xs'>{`(${order.items.length} ${order.items.length > 1 ? "items" : "item"})`}</span></h1>
                     <p>₹{order.subtotal.toFixed(2)}</p>
                 </div>
                 <div className='flex justify-between items-center'>

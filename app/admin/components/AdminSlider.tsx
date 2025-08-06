@@ -7,13 +7,26 @@ import { IoClose, IoStatsChart } from 'react-icons/io5'
 import { MdSpaceDashboard } from 'react-icons/md'
 import { PiSignOutBold } from 'react-icons/pi'
 import { bodyOverflowHandler } from '@/utils'
-import { useSignoutHandler } from '../hooks'
 
-export function AdminSlider({ setShow }: { setShow: React.Dispatch<React.SetStateAction<boolean>> }) {
+type Props = {
+    setShow: React.Dispatch<React.SetStateAction<boolean>>;
+    setOpenConfirmation: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export function AdminSlider({ setShow, setOpenConfirmation }: Props) {
     const pathName = usePathname()
     const [isvisible, setVisible] = useState(false)
-    const { isLoading, signOutHandler } = useSignoutHandler();
 
+    // Function to handle closing the slider and resetting the state
+    const handleClose = useCallback(() => {
+        setVisible(false)
+        bodyOverflowHandler(false)
+        setTimeout(() => {
+            setShow(false)
+        }, 500);
+    }, [bodyOverflowHandler])
+
+    // Effect to set the visibility and handle body overflow
     useEffect(() => {
         setVisible(true)
         bodyOverflowHandler(true)
@@ -30,16 +43,13 @@ export function AdminSlider({ setShow }: { setShow: React.Dispatch<React.SetStat
             window.removeEventListener('resize', handleResize)
         }
 
-    }, [setShow])
+    }, [setShow, handleClose, bodyOverflowHandler])
 
-
-    const handleClose = useCallback(() => {
-        setVisible(false)
-        bodyOverflowHandler(false)
-        setTimeout(() => {
-            setShow(false)
-        }, 500);
-    }, [])
+    // Function to open the logout confirmation dialog
+    const openLogoutConfirmation = useCallback(() => {
+        handleClose()
+        setOpenConfirmation(true)
+    }, [handleClose])
 
     return (
         <div className='fixed top-0 left-0 h-full w-full z-50 lg:hidden '>
@@ -69,9 +79,9 @@ export function AdminSlider({ setShow }: { setShow: React.Dispatch<React.SetStat
                             <h1>Orders</h1>
                         </Link>
                     </div>
-                    <button disabled={isLoading} onClick={signOutHandler} className={`${isLoading ? "bg-gray-500" : "bg-red-500 active:ring-2 hover:opacity-90 active:ring-red-500"}  items-center gap-3  duration-200 shadow-md flex cursor-pointer sm:h-12 h-11 px-5 font-medium outline-none rounded-lg text-white justify-between`}>
+                    <button onClick={openLogoutConfirmation} className="bg-red-500 active:ring-2 hover:opacity-90 active:ring-red-500 items-center gap-3  duration-200 shadow-md flex cursor-pointer sm:h-12 h-11 px-5 font-medium outline-none rounded-lg text-white justify-between">
                         <p >Sign Out</p>
-                        {isLoading ? <div className='animate-spin border-3 border-b-transparent size-5 rounded-full'></div> : <PiSignOutBold className='text-lg' />}
+                        <PiSignOutBold className='text-lg' />
                     </button>
 
                 </div>

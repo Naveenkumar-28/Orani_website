@@ -50,10 +50,8 @@ export const POST = withAuth(async (req, _, user) => {
     return Response.json({ success: true, message: 'Payment successful' }, { status: 200 })
 
   } catch (error) {
-
-    console.log({ error: (error as Error).message })
-
-    return Response.json({ success: false, error: error, message: "Somthing went wrong!" }, { status: 500 })
-
+    const err = error as Error
+    console.log({ error: err.message })
+    return Response.json({ success: false, error: err?.message, message: "Order failed" }, { status: 500 })
   }
 })

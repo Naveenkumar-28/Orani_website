@@ -7,6 +7,7 @@ import { addressSchema } from "../utils"
 import { createSendMessage } from "@/utils"
 import { AddressFormData, AddressFormType } from "../types"
 import { ADDRESS_TYPE } from "../constants"
+import { useUserData } from "@/hooks"
 
 type ErrorResponse = {
     success: false;
@@ -30,7 +31,7 @@ const initialState = {
 export const useAddAddressHandler = ({ addNewModelCloseHandler, EditModelCloseHandler }: Props) => {
     const [Errors, setErrors] = useState(initialState)
     const { page, addNewAddress, isLoading, addresses } = useSelector((state: RootState) => state.Addresses)
-    const { user, isSignedIn } = useSelector((state: RootState) => state.UserDetails)
+    const { user, isSignedIn } = useUserData()
     const sendMessage = createSendMessage()
     const dispatch = useDispatch<AppDispatch>()
 

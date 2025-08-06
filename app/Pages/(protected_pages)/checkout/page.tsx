@@ -27,6 +27,7 @@ function page() {
     const [limit, setLimit] = useState(5)
     const { addresses } = useSelector((state: RootState) => state.Addresses)
 
+    // Close model handlers
     const addNewModelCloseHandler = useCallback(() => {
 
         setAddAddressModelOpen(false)
@@ -35,6 +36,7 @@ function page() {
 
     }, [dispatch, bodyOverflowHandler])
 
+    // Close model handler for edit address
     const EditModelCloseHandler = useCallback(() => {
 
         setEditAddressModelOpen(false)
@@ -45,6 +47,7 @@ function page() {
 
     const { addressformData, validateAddressForm, isLoading, editAddressHandler, uploadAddressHandler } = useAddAddressHandler({ addNewModelCloseHandler, EditModelCloseHandler })
 
+    // get addresses from the server
     const getAddresses = useCallback(async () => {
         dispatch(fetchAddresses({ page: 1, limit, firstTimeLoading: true })).unwrap().then((response) => {
             if (response.addresses.length == 0) {

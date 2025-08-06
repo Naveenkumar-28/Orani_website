@@ -14,7 +14,7 @@ export const CartTotal = memo(() => {
                 <div className="border border-gray-200 px-5 pt-5 lg:pb-8 pb-3 flex flex-col gap-5 w-full rounded-sm">
                     <h5 className="lg:text-xl text-lg font-normal sm:text-xl">Cart Totals</h5>
                     <div className="flex justify-between text-neutral-600">
-                        <h5 className='text-sm lg:text-base flex justify-between items-center gap-2'>Subtotal<span className='font-light'>{`(${cartList.length} ${cartList.length > 0 ? "items" : "item"})`}</span></h5>
+                        <h5 className='text-sm lg:text-base flex justify-between items-center gap-2'>Subtotal<span className='font-light'>{`(${cartList.length} ${cartList.length > 1 ? "items" : "item"})`}</span></h5>
                         <p className='text-sm lg:text-base'>₹{pricing.subtotal.toFixed(2)}</p>
                     </div>
                     <div className="flex justify-between text-neutral-600">

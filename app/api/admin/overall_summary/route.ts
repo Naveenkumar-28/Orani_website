@@ -6,9 +6,9 @@ export const GET = async () => {
         await connectToDatabase();
 
         const [summary] = await OverAllSummary.aggregate([
-            {
-                $limit: 1 // Equivalent to findOne()
-            },
+            { $limit: 1 },
+
+            // 🔹 Lookup top sold products
             {
                 $lookup: {
                     from: 'product_lists',
@@ -17,6 +17,8 @@ export const GET = async () => {
                     as: 'topSoldProducts'
                 }
             },
+
+            // 🔹 Lookup recent order documents
             {
                 $lookup: {
                     from: 'orders',
@@ -25,6 +27,32 @@ export const GET = async () => {
                     as: 'recentOrders'
                 }
             },
+
+            // 🔹 Lookup all addresses used by recentOrders
+            {
+                $lookup: {
+                    from: 'addresses',
+                    let: { recentOrders: "$recentOrders" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $in: ["$_id", {
+                                        $map: {
+                                            input: "$$recentOrders",
+                                            as: "order",
+                                            in: "$$order.shippingAddress"
+                                        }
+                                    }]
+                                }
+                            }
+                        }
+                    ],
+                    as: "recentAddresses"
+                }
+            },
+
+            // 🔹 Final projection with sorting, mapping, and embedded shipping address
             {
                 $project: {
                     _id: 1,
@@ -35,6 +63,8 @@ export const GET = async () => {
                     reviewBreakdown: 1,
                     createdAt: 1,
                     updatedAt: 1,
+
+                    // Top sold products, sorted
                     topSoldProducts: {
                         $map: {
                             input: {
@@ -54,6 +84,8 @@ export const GET = async () => {
                             }
                         }
                     },
+
+                    // Recent orders with embedded shippingAddress
                     recentOrders: {
                         $map: {
                             input: {
@@ -67,17 +99,33 @@ export const GET = async () => {
                                 _id: "$$order._id",
                                 totalAmount: "$$order.totalAmount",
                                 createdAt: "$$order.createdAt",
-                                orderStatus: "$$order.orderStatus"
+                                orderStatus: "$$order.orderStatus",
+                                razorpay_order_id: "$$order.razorpay_order_id",
+                                items: "$$order.items",
+                                subtotal: "$$order.subtotal",
+                                deliveryCharge: "$$order.deliveryCharge",
+                                discount: "$$order.discount",
+                                paymentMethod: "$$order.paymentMethod",
+                                paymentStatus: "$$order.paymentStatus",
+
+                                //Lookup shipping address inline from recentAddresses
+                                shippingAddress: {
+                                    $first: {
+                                        $filter: {
+                                            input: "$recentAddresses",
+                                            as: "addr",
+                                            cond: {
+                                                $eq: ["$$addr._id", "$$order.shippingAddress"]
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
         ]);
-
-        console.log(summary); // aggregation returns array
-
-
 
         return Response.json({
             success: true,
@@ -86,11 +134,13 @@ export const GET = async () => {
         });
 
     } catch (error) {
-        console.error('Error fetching order statistics:', error);
+        const err = error as Error
+        console.log(err.message);
         return Response.json(
             {
                 success: false,
-                message: error instanceof Error ? error.message : 'Something went wrong while fetching order statistics'
+                error: err.message,
+                message: 'Order statistics fetched failed'
             },
             { status: 500 }
         );

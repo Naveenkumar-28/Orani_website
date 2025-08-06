@@ -1,6 +1,7 @@
 import { connectToDatabase } from "@/lib/mongoDB";
 import { User } from "@/models";
 import { sendEmailVerificationCode } from "@/templates";
+import { GenerateRandomSixDigit } from "@/utils";
 import { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -12,8 +13,7 @@ export async function POST(req: NextRequest) {
         if (!currentUser) return Response.json({ success: false, message: "This email address not found" }, { status: 404 });
         if (currentUser.isVerified && currentUser.verificationCode == null) return Response.json({ success: false, message: "Your email already verified" }, { status: 400 });
 
-        const randomSixDigit = Math.floor(100000 + Math.random() * 900000);
-        console.log(randomSixDigit)
+        const randomSixDigit = GenerateRandomSixDigit()
 
         currentUser.verificationCode = randomSixDigit
 
@@ -29,8 +29,9 @@ export async function POST(req: NextRequest) {
         return Response.json({ success: true, message: "Email verification Code send successfully" }, { status: 200 });
 
     } catch (error) {
-        console.log(error)
-        return Response.json({ success: false, message: 'Somthing went wrong!' }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ success: false, error: err.message, message: 'Email verification Code send failed' }, { status: 500 })
     }
 
 }

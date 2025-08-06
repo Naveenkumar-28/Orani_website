@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function TopProductsSkeleton() {
     return (
-        <div className='w-full flex flex-col bg-white ring-1 shadow-md ring-gray-200 rounded-md px-5 py-8 gap-8 min-h-6/12 animate-pulse'>
+        <div className='w-full flex flex-col bg-white ring-1 shadow-md ring-gray-200 rounded-md px-5 py-8 gap-8 flex-1 animate-pulse'>
             {/* Header */}
             <div className='flex flex-col gap-1'>
                 <div className='h-4 w-32 bg-gray-300 rounded-sm' />

@@ -15,7 +15,7 @@ export function CategoryDropdown({ categorySelect, isShow, setCategorySelect, se
     return (
         <div className="h-full">
             <div role="button" onClick={() => setIsShow((pre) => !pre)}
-                className="flex items-center justify-between bg-green rounded-sm duration-500 cursor-pointer text-white font-bold text-lg lg:px-2 px-5 h-full">
+                className={`${isShow ? "rounded-t-sm" : "rounded-sm"} flex items-center justify-between bg-green duration-500 cursor-pointer text-white font-bold text-lg lg:px-2 px-5 h-full`}>
                 <div className="flex items-center gap-2">
                     <IoMenu className=" lg:text-2xl text-xl" />
                     <p className="xl:text-base text-sm font-semibold capitalize">{categorySelect == 'all' ? `${categorySelect} Category` : categorySelect} </p>

@@ -12,16 +12,19 @@ export type ProductType = {
     quantity: number,
 }
 
-export const POST = withAuth(async (req, _, user) => {
+export const POST = withAuth(async (req, _) => {
     try {
-        await connectToDatabase()
         const data = await req.json()
         if (!data.orderId) return Response.json({ success: false, message: 'Order id missing please try again' }, { status: 404 })
+
+        await connectToDatabase()
+
         const order = await Order.findOne({ razorpay_order_id: data?.orderId })
 
         if (!order) {
             return Response.json({ success: false, message: 'Order not found' }, { status: 404 });
         }
+
         order.orderStatus = "cancelled"
 
         const productIds = order.items.map((p: ProductType) => new mongoose.Types.ObjectId(p.productId))
@@ -45,7 +48,7 @@ export const POST = withAuth(async (req, _, user) => {
 
         await order.save()
 
-        const currentUser = await User.findOne({ _id: user._id })
+        const currentUser = await User.findOne({ _id: order.user })
 
         const { razorpay_order_id, items, subtotal, discount, deliveryCharge, totalAmount } = order
 
@@ -65,10 +68,9 @@ export const POST = withAuth(async (req, _, user) => {
         return Response.json({ success: true, message: 'Order as be cancelled' }, { status: 200 })
 
     } catch (error) {
-
-        console.log({ error: (error as Error).message })
-
-        return Response.json({ success: false, error, message: "Something went wrong!" }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ success: false, error: err.message, message: "Order cancellation failed" }, { status: 500 })
 
     }
 

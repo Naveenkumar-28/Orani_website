@@ -99,7 +99,8 @@ export const POST = withAuth(async (req, _, user) => {
         return Response.json({ razorpayOrder: createOrder, mongoOrder: order }, { status: 200 })
 
     } catch (error) {
-        console.log(error);
-        return Response.json({ success: false, error, message: 'Somthing went wrong!' }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ success: false, error: err.message, message: 'Order create failed' }, { status: 500 })
     }
 })

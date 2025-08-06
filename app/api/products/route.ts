@@ -16,20 +16,43 @@ export const GET = async (req: Request) => {
         if (search) query.name = { $regex: search, $options: "i" }
         if (category) query.category = { $regex: category, $options: "i" }
 
-        const products = await ProductList.find(query)
-            .select("-userRating -rating -sold")
-            .skip((page - 1) * limit)
-            .limit(limit)
-
-        const totalCount = await ProductList.countDocuments(query)
-        const totalPage = Math.ceil(totalCount / limit)
+        const [result] = await ProductList.aggregate([
+            { $match: query },
+            {
+                $facet: {
+                    products: [
+                        { $sort: { createdAt: -1 } },
+                        { $skip: (page - 1) * limit },
+                        { $limit: limit },
+                        {
+                            $project: {
+                                _id: 1,
+                                name: 1,
+                                description: 1,
+                                imageUrl: 1,
+                                price: 1,
+                                discountPrice: 1,
+                                stock: 1,
+                                quantity: 1
+                            }
+                        }
+                    ],
+                    total: [
+                        { $count: 'count' }
+                    ]
+                }
+            }
+        ])
+        const products = result?.products || []
+        const totalPage = Math.ceil((result?.total?.[0]?.count || 0) / limit)
         return Response.json({ success: true, products, totalPage }, { status: 200 })
 
     } catch (error) {
-        console.log("Error : ", (error as Error).message);
+        const err = error as Error
+        console.log(err.message);
 
         return Response.json(
-            { message: "Something went wrong!" },
+            { message: "Products fetched failed", success: false, error: err.message },
             { status: 500 } // Internal Server Error
         )
     }

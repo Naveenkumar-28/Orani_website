@@ -1,4 +1,3 @@
-// redux/rootReducer.ts
 import { combineReducers } from "@reduxjs/toolkit";
 import {
     notifyMessageReducer,
@@ -39,9 +38,22 @@ const appReducer = combineReducers({
 });
 
 const rootReducer = (state: ReturnType<typeof appReducer> | undefined, action: any) => {
-    // Reset entire state on logout
+
     if (authLogout.fulfilled.match(action)) {
-        return appReducer(undefined, action);
+
+        return appReducer({
+            ...state,
+            AdminOrders: undefined,
+            AdminProducts: undefined,
+            OrderList: undefined,
+            OverallSummary: undefined,
+            UploadProductData: undefined,
+            UserDetails: undefined,
+            CartItems: undefined,
+            WishItems: undefined,
+            Addresses: undefined,
+        }, action);
+
     }
     return appReducer(state, action);
 };

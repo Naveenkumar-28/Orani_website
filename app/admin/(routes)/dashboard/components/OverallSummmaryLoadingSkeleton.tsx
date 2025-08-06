@@ -3,14 +3,15 @@ import { BusinessOverviewSkeleton } from './BusinessOverviewSkeleton'
 import { OrderSummaryChartSkeleton } from './OrderSummaryChartSkeleton'
 import TopProductsSkeleton from './TopProductsSkeleton'
 import { OverallReviewsSkeleton } from './OverallReviewsSkeleton'
+import { RecentOrdersSkeleton } from './RecentOrdersSkeleton'
 
 export function OverallSummmaryLoadingSkeleton() {
     return (
-        <div className="px-5 flex gap-5 flex-col animate-pulse">
-            <div className="flex sm:gap-5 gap-2 mb-10 xl:flex-row flex-col">
+        <div className="px-5 flex sm:gap-5 gap-2 mb-10 flex-col animate-pulse">
+            <div className="flex sm:gap-5 gap-2 xl:flex-row flex-col">
 
                 {/* Left Section: BusinessOverview + OrderSummaryChart */}
-                <div className="xl:w-8/12 flex flex-col sm:gap-5 gap-2">
+                <div className="xl:w-8/12 flex flex-col sm:gap-5 gap-2 lg:max-h-full">
                     {/* BusinessOverview Skeleton */}
                     <BusinessOverviewSkeleton />
 
@@ -26,8 +27,8 @@ export function OverallSummmaryLoadingSkeleton() {
                     {/* OverAllReviews Skeleton */}
                     <OverallReviewsSkeleton />
                 </div>
-
             </div>
+            <RecentOrdersSkeleton />
         </div>
 
     )

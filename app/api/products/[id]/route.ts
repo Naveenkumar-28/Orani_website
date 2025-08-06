@@ -1,5 +1,6 @@
 import { ProductList } from '@/models';
 import { connectToDatabase } from "@/lib/mongoDB";
+import mongoose from 'mongoose';
 
 export const GET = async (req: Request, { params }: { params: { id: string } }) => {
 
@@ -20,12 +21,14 @@ export const GET = async (req: Request, { params }: { params: { id: string } }) 
         const formattedProduct = product.toObject()
         const specificProduct = { ...formattedProduct, userRatings: formattedProduct.userRatings.length }
 
+
         return Response.json({ success: true, specificProduct, relatedProducts }, { status: 200 })
     } catch (error) {
-        console.log((error as Error).message);
+        const err = error as Error
+        console.log(err.message);
         return Response.json(
-            { success: false, error: "Something went wrong!" },
-            { status: 500 } // Internal Server Error
+            { success: false, message: "Specific product fetched failed", error: err.message },
+            { status: 500 }
         )
     }
 }

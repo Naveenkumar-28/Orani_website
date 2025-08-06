@@ -17,7 +17,7 @@ export function OverAllReviews() {
         : []
 
     return (
-        <div className='w-full flex flex-col bg-white ring-1 shadow-md ring-gray-200 rounded-md px-5 py-8 gap-8 min-h-6/12'>
+        <div className='w-full flex flex-col bg-white ring-1 shadow-md ring-gray-200 rounded-md px-5 py-8 gap-8 flex-1'>
             <div className='flex flex-col gap-1'>
                 <h1 className='font-semibold sm:text-xl text-lg'>Reviews</h1>
                 <p className='text-xs text-gray-500'>Overall reviews</p>

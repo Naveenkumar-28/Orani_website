@@ -21,14 +21,15 @@ export async function GET(req: NextRequest) {
         }
         const newAccessToken = createAccessToken({ email: CurrentUser.email, _id: CurrentUser._id, role: CurrentUser.role });
 
+        const localhost = req.headers.get('host')?.startsWith('localhost');
         (await cookies()).set('accessToken', newAccessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: process.env.NODE_ENV === 'production' && !localhost,
+            sameSite: 'lax',
             path: '/',
             maxAge: 60 * 15,
         });
-
-        return NextResponse.json({ success: true, accessToken: newAccessToken, role: CurrentUser.role });
+        return NextResponse.json({ success: true, message: "Access token issued successfully", accessToken: newAccessToken, role: CurrentUser.role });
     } catch (err) {
         return NextResponse.json({ error: 'Invalid token' }, { status: 403 });
     }

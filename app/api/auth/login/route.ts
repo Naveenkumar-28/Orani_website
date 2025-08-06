@@ -26,18 +26,19 @@ export async function POST(req: NextRequest) {
         const accessToken = createAccessToken({ email, _id: currentUser._id, role: currentUser.role });
         const refreshToken = createRefreshToken({ _id: currentUser._id });
 
+        const localhost = req.headers.get('host')?.startsWith('localhost');
+
         (await cookies()).set('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            // path: '/api/auth/refreshtoken',
+            secure: process.env.NODE_ENV === 'production' && !localhost,
             sameSite: 'lax',
             maxAge: 60 * 60 * 24 * 7, // 7 days
         });
 
         (await cookies()).set('accessToken', accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            // path: '/',
+            secure: process.env.NODE_ENV === 'production' && !localhost,
+            sameSite: 'lax',
             maxAge: 60 * 15,
         });
 
@@ -45,7 +46,8 @@ export async function POST(req: NextRequest) {
         const user = { _id, name, email, role, imageUrl }
         return Response.json({ success: true, message: 'Login successfully!', accessToken, user }, { status: 200 })
     } catch (error) {
-        console.log(error)
-        return Response.json({ success: false, message: 'Somthing went wrong!', error }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ success: false, message: 'Login failed', error: err.message }, { status: 500 })
     }
 }

@@ -47,8 +47,10 @@ export const POST = withAuth(async (req: Request, _, user) => {
 
         if (!Product) return Response.json({ success: false, message: "Product not found" }, { status: 404 })
 
-        return Response.json({ success: true, product: Product, message: 'Item added successfully' }, { status: 200 })
+        return Response.json({ success: true, product: Product, message: 'wish item added successfully' }, { status: 200 })
     } catch (error) {
-        return Response.json({ success: false, message: 'Somthing went wrong!', error: (error as Error).message }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ success: false, message: 'Wish item add failed', error: err.message }, { status: 500 })
     }
 })

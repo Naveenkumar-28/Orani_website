@@ -39,11 +39,12 @@ export const GET = async (req: Request) => {
 
         const { latestProducts, topRatedProducts, bestReviewedProducts } = products;
 
-        return Response.json({ success: true, topRatedProducts, bestReviewedProducts, latestProducts }, { status: 200 })
+        return Response.json({ success: true, message: "Product sliders fetched successfully", topRatedProducts, bestReviewedProducts, latestProducts }, { status: 200 })
     } catch (error) {
-        console.log(error);
+        const err = error as Error
+        console.log(err.message);
         return Response.json(
-            { success: false, message: "Something went wrong!", error: error },
+            { success: false, message: "Product sliders fetched failed", error: err.message },
             { status: 500 } // Internal Server Error
         )
     }

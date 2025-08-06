@@ -34,7 +34,8 @@ export const POST = withAuth(async (req) => {
 
         return Response.json({ success: true, message: "Product uploaded successfully" }, { status: 201 });
     } catch (error) {
-        console.error("Error uploading file:", error);
-        return Response.json({ message: "Product upload failed ", success: false, error: (error as Error)?.message }, { status: 500 });
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ message: "Product upload failed", success: false, error: err.message }, { status: 500 });
     }
 })

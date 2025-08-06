@@ -49,8 +49,10 @@ export const POST = withAuth(async (req: Request, _, user) => {
 
         const updatedProduct = { ...AddProduct, quantity: Math.min(product.quantity, AddProduct.stock) }
 
-        return Response.json({ success: true, product: updatedProduct, message: 'cart item added successfully' }, { status: 200 })
+        return Response.json({ success: true, product: updatedProduct, message: 'Cart item added successfully' }, { status: 200 })
     } catch (error) {
-        return Response.json({ success: false, message: 'Somthing went wrong!', error: (error as Error).message }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ success: false, message: 'Cart item add failed', error: err.message }, { status: 500 })
     }
 })

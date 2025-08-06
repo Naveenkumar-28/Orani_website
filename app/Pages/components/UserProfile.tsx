@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react'
+import React, { memo, useCallback, useEffect, useState } from 'react'
 import { useUserData } from '@/hooks/useUserData'
 import { TbArrowsExchange } from 'react-icons/tb'
 import { IoLogOutOutline } from 'react-icons/io5'
@@ -7,13 +7,21 @@ import { FaUser } from 'react-icons/fa'
 import { GoSignIn } from 'react-icons/go'
 import { VscSignIn } from 'react-icons/vsc'
 import { useUserhandler } from '../hooks'
-import { LoadingIndicator, Avatar } from '@/components'
+import { LoadingIndicator, Avatar, LogoutConfirmation, FullScreenLoader } from '@/components'
+import { bodyOverflowHandler } from '@/utils'
 
 export const UserProfile = memo(() => {
-    const { user } = useUserData()
+    const { user, isLoading: userLoding } = useUserData()
+    const [isOpenLogoutConfirmation, setOpenLogoutConfirmation] = useState(false)
     const router = useRouter()
 
-    const { isLoading,
+    const logoutConfirmationCloseHandler = useCallback(() => {
+        setOpenLogoutConfirmation(false)
+        bodyOverflowHandler(false)
+    }, [bodyOverflowHandler])
+
+    const {
+        isLoading,
         isImageUploading,
         changeImageHandler,
         handleClickOutside,
@@ -22,14 +30,14 @@ export const UserProfile = memo(() => {
         fileInputRef,
         isShow,
         profileRef,
-        setIsShow } = useUserhandler()
+        setIsShow } = useUserhandler({ logoutConfirmationCloseHandler })
 
     useEffect(() => {
         document.addEventListener('click', handleClickOutside);
         return () => {
             document.removeEventListener('click', handleClickOutside);
         };
-    }, []);
+    }, [handleClickOutside]);
 
     return (
         <div ref={profileRef} className="flex px-2 relative">
@@ -68,8 +76,8 @@ export const UserProfile = memo(() => {
                                 {!isImageUploading ? <TbArrowsExchange className='lg:text-lg text-base' /> : <LoadingIndicator borderWidth='border-2' color='border-gray-400' size='size-4' />}
                                 <span className=' text-sm font-normal'>Change profile picture</span>
                             </button>
-                            <button disabled={isLoading} onClick={logoutHandler} className='userDetailsBtn'>
-                                {!isLoading ? <IoLogOutOutline className='lg:text-lg text-base' /> : <LoadingIndicator borderWidth='border-2' color='border-gray-400' size='size-4' />}
+                            <button onClick={() => setOpenLogoutConfirmation(true)} className='userDetailsBtn'>
+                                <IoLogOutOutline className='lg:text-lg text-base' />
                                 <span className=' text-sm font-normal'> Logout</span>
                             </button>
                         </div>
@@ -93,7 +101,8 @@ export const UserProfile = memo(() => {
                 onChange={checkProfilePicHandler}
                 className="hidden"
             />
-
+            {isOpenLogoutConfirmation && <LogoutConfirmation logoutHandler={logoutHandler} onDismiss={logoutConfirmationCloseHandler} />}
+            <FullScreenLoader loadingState={isLoading || userLoding} />
         </div>
     )
 })

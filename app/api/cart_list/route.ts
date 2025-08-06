@@ -44,8 +44,10 @@ export const POST = async (req: Request) => {
 
         })
 
-        return Response.json({ success: true, products: updatedProducts, message: 'cartList fetched successfully' }, { status: 200 })
+        return Response.json({ success: true, products: updatedProducts, message: 'CartList fetched successfully' }, { status: 200 })
     } catch (error) {
-        return Response.json({ success: false, message: 'Somthing went wrong!', error: (error as Error).message }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ success: false, message: 'CartList fetched failed', error: err.message }, { status: 500 })
     }
 }

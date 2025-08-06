@@ -9,12 +9,12 @@ export const GET = withAuth(async (req, _, user) => {
         if (!currentUser) return Response.json({ message: 'User not found' }, { status: 404 })
         const { _id, name, imageUrl, email, role }: UserType = currentUser
 
-        return Response.json({ success: true, user: { _id, name, imageUrl, email, role } }, { status: 200 })
+        return Response.json({ success: true, message: "User details fetched successfully", user: { _id, name, imageUrl, email, role } }, { status: 200 })
 
     } catch (error) {
-        console.log(error);
-
-        return Response.json({ message: 'Somthing went wrong!' }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ message: 'User details fetched failed', success: false, error: err.message }, { status: 500 })
     }
 
 })

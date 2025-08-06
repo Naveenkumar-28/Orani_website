@@ -73,22 +73,22 @@ export function Footer() {
                                     className="font-medium px-3 flex justify-center items-center text-xs uppercase w-4/12 duration-200 text-white cursor-pointer bg-green hover:bg-white hover:text-green border-2 border-green h-full ">Subscribe</button>
                             </div>
                             <ul className="flex gap-5 ">
-                                <li className=" duration-500 hover:scale-120 text-white bg-green p-2 rounded-full text-xl">
+                                <li className=" duration-500 hover:scale-110 text-white bg-green p-2 rounded-full text-xl">
                                     <Link href="#" >
                                         <BiLogoFacebook />
                                     </Link>
                                 </li>
-                                <li className=" duration-500 hover:scale-120 text-white bg-green p-2 rounded-full text-xl">
+                                <li className=" duration-500 hover:scale-110 text-white bg-green p-2 rounded-full text-xl">
                                     <Link href="#" >
                                         <FaInstagram />
                                     </Link>
                                 </li>
-                                <li className=" duration-500 hover:scale-120 text-white bg-green p-2 rounded-full text-xl">
+                                <li className=" duration-500 hover:scale-110 text-white bg-green p-2 rounded-full text-xl">
                                     <Link href="#" >
                                         <FaTwitter />
                                     </Link>
                                 </li>
-                                <li className=" duration-500 hover:scale-120 text-white bg-green p-2 rounded-full text-xl">
+                                <li className=" duration-500 hover:scale-110 text-white bg-green p-2 rounded-full text-xl">
                                     <Link href="#" >
                                         <TbBrandGithubFilled />
                                     </Link>

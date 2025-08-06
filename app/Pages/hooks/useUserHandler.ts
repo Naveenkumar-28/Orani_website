@@ -1,14 +1,12 @@
 import { useCallback, useRef, useState } from "react"
 import { authLogout, changeProfilePic, userReset } from '@/app/redux'
-import { CartReset, updateCartListIsSignIn } from '../(public_pages)/cart/redux'
-import { updateWishListIsSignIn, wishListReset } from '../(public_pages)/wishlist/redux'
 import { useDispatch } from "react-redux"
 import { AppDispatch } from "@/app/redux/store"
 import { createSendMessage } from "@/utils"
 import { useUserData } from "@/hooks"
 import { useRouter } from "next/navigation"
 
-export const useUserhandler = () => {
+export const useUserhandler = ({ logoutConfirmationCloseHandler }: { logoutConfirmationCloseHandler: () => void }) => {
     const dispatch = useDispatch<AppDispatch>()
     const sendMessage = createSendMessage()
     const { user } = useUserData()
@@ -21,6 +19,7 @@ export const useUserhandler = () => {
 
     //Logout functionality
     const logoutHandler = useCallback(async () => {
+        logoutConfirmationCloseHandler()
         setIsLoading(true)
         try {
             await dispatch(authLogout()).unwrap()

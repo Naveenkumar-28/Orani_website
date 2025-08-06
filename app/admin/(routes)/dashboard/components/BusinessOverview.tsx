@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 export function BusinessOverview() {
     const { data } = useSelector((state: RootState) => state.OverallSummary)
     return (
-        <div className='w-full sm:gap-5 gap-2 lg:min-h-3/12 grid grid-cols-2 sm:grid-cols-3'>
+        <div className='w-full sm:gap-5 gap-2 lg:max-h-3/12 grid grid-cols-2 sm:grid-cols-3'>
             <div className='bg-white ring-1 shadow-md ring-gray-200 rounded-md  px-5 py-5 gap-4 flex flex-col'>
                 <i className='lg:size-10 md:size-8 sm:size-7 size-6 bg-green flex justify-center items-center rounded-sm text-white lg:text-xl text-sm'>
                     <FaRupeeSign />

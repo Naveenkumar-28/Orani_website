@@ -17,7 +17,6 @@ export const GET = withAuth(async (req) => {
         await connectToDatabase()
         if (page == 1) {
             const data = await OrdersData.findOne().select("-updatedAt -createdAt")
-            console.log(data);
             ordersData = data
         }
         const query: { orderStatus?: string, razorpay_order_id?: any } = {}
@@ -65,8 +64,8 @@ export const GET = withAuth(async (req) => {
 
         return Response.json({ success: true, totalPage, orders, ordersData }, { status: 200 })
     } catch (error) {
-        console.log((error as Error).message);
-
-        return Response.json({ message: "Order fetched failed", error: (error as Error)?.message }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ message: "Order fetched failed", error: err.message }, { status: 500 })
     }
 })

@@ -48,11 +48,11 @@ export const GET = withAuth(async (req) => {
         const products = result?.products || []
         const totalPage = Math.ceil(total / limit)
 
-        return Response.json({ success: true, products, totalPage }, { status: 200 })
+        return Response.json({ success: true, products, message: 'Product fetched successfully', totalPage }, { status: 200 })
 
     } catch (error) {
-        console.log("Error : ", (error as Error).message);
-
-        return Response.json({ message: "Something went wrong!", error: (error as Error).message }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ message: 'Product fetched failed', error: err.message }, { status: 500 })
     }
 })

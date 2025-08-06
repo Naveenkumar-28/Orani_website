@@ -26,13 +26,13 @@ export const POST = withAuth(async (req, _, user) => {
             success: true,
             message: "Address added successfully"
         }, { status: 201 })
-    } catch (err) {
-        if (err instanceof Yup.ValidationError) {
-            return Response.json({ success: false, message: err.errors[0] || "Validation failed", error: "Validation failed" }, { status: 400 })
+    } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+            return Response.json({ success: false, message: error.errors[0] || "Validation failed", error: "Validation failed" }, { status: 400 })
         }
-
-        console.error("Unexpected Error:", err)
-        return Response.json({ success: false, message: "Somthing went wrong!", error: (err as Error).message }, { status: 500 })
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ success: false, message: "Address add failed", error: err.message }, { status: 500 })
     }
 })
 
@@ -76,9 +76,10 @@ export const GET = withAuth(async (req, _, user) => {
         const totalPage = Math.ceil((result.totalCount[0]?.count || 0) / limit) || 0
 
         return Response.json({ success: true, addresses, totalPage, message: "Addresses fetched successfully" }, { status: 200 })
-    } catch (err) {
-        console.error("Unexpected Error:", err)
-        return Response.json({ success: false, message: "Somthing went wrong!", error: (err as Error).message }, { status: 500 })
+    } catch (error) {
+        const err = error as Error
+        console.log(err.message);
+        return Response.json({ success: false, message: "Addresses fetching failed", error: err.message }, { status: 500 })
     }
 })
 
