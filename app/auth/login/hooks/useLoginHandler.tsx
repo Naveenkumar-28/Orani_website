@@ -3,14 +3,14 @@ import { useCallback, useMemo, useRef, useState } from "react"
 import { useDispatch } from "react-redux"
 import { createSendMessage } from "@/utils/sendMessage/createSendMessage"
 import { AppDispatch } from "@/app/redux/store"
-import { getCartLocalStoreList } from "@/app/tempPages/(public_pages)/cart/utils"
-import { mergeCartList } from "@/app/tempPages/(public_pages)/cart/redux"
+import { getCartLocalStoreList } from "@/app/pages/(public_pages)/cart/utils"
+import { mergeCartList } from "@/app/pages/(public_pages)/cart/redux"
 import { useRouter } from "next/navigation"
 import * as Yup from 'yup'
 import { authLogin } from "@/app/redux/api"
 import { loginSchema } from "../utils"
-import { getWishListLocalStorage } from "@/app/tempPages/(public_pages)/wishlist/utils"
-import { mergeWishList } from "@/app/tempPages/(public_pages)/wishlist/redux"
+import { getWishListLocalStorage } from "@/app/pages/(public_pages)/wishlist/utils"
+import { mergeWishList } from "@/app/pages/(public_pages)/wishlist/redux"
 
 const initialState = {
     email: '',

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { usePricetotal } from "./usePriceTotal";
 import { createSendMessage } from "@/utils/sendMessage/createSendMessage";
-import { CartReset } from "@/app/tempPages/(public_pages)/cart/redux";
+import { CartReset } from "@/app/pages/(public_pages)/cart/redux";
 import { AppDispatch, RootState } from "@/app/redux/store";
 import { WEB_SITE_NAME } from "@/constants";
 import { resetOrders } from "../../orders/redux";

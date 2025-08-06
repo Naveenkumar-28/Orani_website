@@ -1,4 +1,4 @@
-import { Pagination } from '@/app/tempPages/components'
+import { Pagination } from '@/app/pages/components'
 import { RootState } from '@/app/redux/store'
 import { LoadingIndicator } from '@/components'
 import React, { SetStateAction } from 'react'

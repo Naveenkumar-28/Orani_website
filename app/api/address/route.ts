@@ -1,4 +1,4 @@
-import { addressSchema } from "@/app/tempPages/(protected_pages)/checkout/utils"
+import { addressSchema } from "@/app/pages/(protected_pages)/checkout/utils"
 import { connectToDatabase } from "@/lib/mongoDB"
 import { withAuth } from "@/lib/withAuth"
 import { Address } from "@/models"

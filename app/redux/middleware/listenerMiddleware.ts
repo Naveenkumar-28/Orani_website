@@ -1,7 +1,7 @@
 import { createListenerMiddleware } from "@reduxjs/toolkit";
 import { authEmailverify, authLogin, getUserdetails } from "../api";
-import { updateCartListIsSignIn } from "@/app/tempPages/(public_pages)/cart/redux";
-import { updateWishListIsSignIn } from "@/app/tempPages/(public_pages)/wishlist/redux";
+import { updateCartListIsSignIn } from "@/app/pages/(public_pages)/cart/redux";
+import { updateWishListIsSignIn } from "@/app/pages/(public_pages)/wishlist/redux";
 
 export const listenerMiddleware = createListenerMiddleware()
 
