@@ -6,6 +6,7 @@ import { WEB_SITE_NAME } from '@/constants'
 import { FiSearch } from 'react-icons/fi'
 import { SmallDeviceSearchInputField } from './SmallDeviceSearchInputField'
 import { NavAccordion } from './NavAccordion'
+import Link from 'next/link'
 
 export function SmallDeviceMenu() {
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
@@ -36,19 +37,20 @@ export function SmallDeviceMenu() {
     return (
         <header className='lg:hidden select-none sticky top-0 z-[99] shadow-lg bg-white'>
             <div className='mediaQuary'>
-                <div className=" w-full flex items-center justify-between py-5  h-16 ">
-                    <h1 className='sm:text-[1.7rem] text-2xl text-green font-semibold uppercase'>{WEB_SITE_NAME}</h1>
-                    <div className='flex items-center gap-2 sm:gap-5'>
-                        <div onClick={onClickHandler} className='sm:w-52 text-gray-500 text-lg min-[425px]:w-52 ring-1 ring-gray-300 flex justify-center items-center rounded-md cursor-pointer h-9 px-2 gap-2 w-28'>
-                            <FiSearch className=' text-2xl text-gray-400' />
-                            <p className=' font-light text-sm w-full'>Search</p>
+                <div className=" w-full flex items-center justify-between h-16">
+                    <Link href={'/pages'} className='sm:text-[1.7rem] text-2xl text-green font-semibold uppercase'>{WEB_SITE_NAME}</Link>
+                    <div className='flex items-center gap-3 sm:gap-5'>
+                        <div onClick={onClickHandler} className='sm:w-52 text-gray-500 text-lg min-[425px]:w-52 ring-1 ring-gray-400 flex justify-center items-center rounded-md cursor-pointer h-9 px-2 gap-2 w-fit'>
+                            <FiSearch className='min-[425px]:text-2xl text-xl text-gray-500' />
+                            <p className=' font-light text-sm w-full min-[425px]:block hidden'>Search</p>
                         </div>
-
-                        {isActive ? (<div className="lg:hidden text-gray-700 cursor-pointer flex gap-1 active:scale-95" onClick={closeTopDrawerHandler} id="menu_icon" >
-                            <IoClose className="font-extrabold text-3xl" />
-                        </div>) : (<div className="lg:hidden text-gray-700 cursor-pointer flex gap-1 active:scale-95" onClick={openTopDrawerHandler} id="menu_icon" >
-                            <HiOutlineMenuAlt1 className="font-extrabold text-3xl" />
-                        </div>)}
+                        <div className='ring-2 rounded-md p-0.5 ring-green bg-green text-white'>
+                            {isActive ? (<div className="lg:hidden  cursor-pointer flex gap-1 active:scale-95" onClick={closeTopDrawerHandler} id="menu_icon" >
+                                <IoClose className="font-extrabold text-3xl" />
+                            </div>) : (<div className="lg:hidden  cursor-pointer flex gap-1 active:scale-95" onClick={openTopDrawerHandler} id="menu_icon" >
+                                <HiOutlineMenuAlt1 className="font-extrabold text-3xl" />
+                            </div>)}
+                        </div>
                     </div>
                 </div>
 

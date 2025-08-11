@@ -46,7 +46,7 @@ html {
   }
 
   .userDetailsBtn {
-    @apply cursor-pointer flex justify-start items-center rounded-sm py-2 gap-2 px-5 w-full text-gray-500 font-light disabled:text-gray-400 not-disabled:hover:bg-green not-disabled:hover:text-white disabled:cursor-not-allowed
+    @apply cursor-pointer flex justify-start items-center rounded-sm py-2 gap-2 ps-3 pe-10 w-full text-gray-500 font-light disabled:text-gray-400 not-disabled:hover:bg-green not-disabled:hover:text-white disabled:cursor-not-allowed
   }
 
   .mediaQuary {

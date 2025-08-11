@@ -25,7 +25,7 @@ export function ProductSliderCard({ product }: { product: ProductSliderType }) {
                     )}
                     <StarRating initialValue={product.rating} className='text-sm sm:text-base lg:text-sm' />
                 </div>
-                {product.discountPrice && <div className='absolute bg-green top-0 left-0 text-white font-light text-[.6rem] rounded-br-sm sm:text-xs px-2 py-1'>{`${Math.round(((product.price - product.discountPrice) / product.price) * 100)}%`}</div>}
+                {product.discountPrice && <div className='absolute bg-green top-0 left-0 text-white font-light text-xs rounded-br-sm sm:text-xs px-2 py-1'>{`${Math.round(((product.price - product.discountPrice) / product.price) * 100)}%`}</div>}
             </div>
         </div>
     )

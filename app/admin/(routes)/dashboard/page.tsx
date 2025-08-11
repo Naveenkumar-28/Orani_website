@@ -19,13 +19,13 @@ function Dashboard() {
         <>
             {
                 !loading ? (
-                    <div className='px-5 flex sm:gap-5 gap-2 flex-col mb-10'>
-                        <div className='flex sm:gap-5 gap-2 xl:flex-row flex-col'>
-                            <div className='xl:w-8/12 flex flex-col sm:gap-5 gap-2 lg:max-h-full'>
+                    <div className='px-5 flex sm:gap-5 gap-3 flex-col mb-10'>
+                        <div className='flex sm:gap-5 gap-3 xl:flex-row flex-col'>
+                            <div className='xl:w-8/12 flex flex-col sm:gap-5 gap-3 lg:max-h-full'>
                                 <BusinessOverview />
                                 <OrderSummaryChart />
                             </div>
-                            <div className='xl:w-4/12 flex xl:flex-col md:flex-row flex-col sm:gap-5 gap-2 max-h-full justify-between'>
+                            <div className='xl:w-4/12 flex xl:flex-col md:flex-row flex-col sm:gap-5 gap-3 max-h-full justify-between'>
                                 <TopProducts />
                                 <OverAllReviews />
                             </div>

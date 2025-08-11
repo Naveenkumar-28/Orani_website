@@ -34,15 +34,15 @@ export const RemoveConfirmation: React.FC<Props> = ({ address, closeDeleteModelH
 
     return (
         <div className='z-[100] fixed top-0 left-0 w-full h-dvh grid place-items-center'>
-            <div className="flex flex-col gap-8 sm:max-w-[35rem] w-11/12 bg-white rounded-sm py-5">
-                <div className='flex flex-col justify-between items-center h-2/12 px-5'>
-                    <h5 className="lg:text-lg font-medium capitalize mb-2 sm:text-base text-wrap text-sm">Are you sure you want to delete this address?</h5>
-                    <div className='flex text-gray-400 mb-3 font-light sm:text-sm text-xs text-wrap'>
+            <div className="flex flex-col sm:max-w-[35rem] w-11/12 bg-white rounded-md py-5">
+                <div className='flex flex-col gap-1 justify-between items-center h-2/12 px-5'>
+                    <h5 className=" capitalize mb-2 text-wrap xl:text-xl text-lg font-normal py-2">Are you sure you want to delete this address?</h5>
+                    <div className='flex text-gray-400 font-light text-sm text-wrap mb-5'>
                         {`${address?.street} ${address?.city}- ${address?.postcode}`}
                     </div>
-                    <div className='flex gap-3'>
-                        <button onClick={closeDeleteModelHandler} className='px-3 md:text-base text-sm py-1 active:scale-95 duration-200 text-green rounded-md ring ring-green cursor-pointer'>No</button>
-                        <button disabled={isLoading} onClick={removeAddressHandler} className='px-3 py-1 active:scale-95 duration-200 md:text-base text-sm text-white rounded-md ring ring-green cursor-pointer bg-green'>Yes , delete</button>
+                    <div className='flex gap-3 justify-end w-full'>
+                        <button onClick={closeDeleteModelHandler} className='px-3 shadow-sm py-2 md:text-base active:scale-95 duration-200 text-green rounded-md ring ring-green cursor-pointer'>No</button>
+                        <button disabled={isLoading} onClick={removeAddressHandler} className='px-3 shadow-sm py-2 active:scale-95 duration-200 md:text-base text-white rounded-md ring ring-green cursor-pointer bg-green'>Yes , delete</button>
                     </div>
                 </div>
 

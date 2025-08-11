@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ReduxProvider } from './redux/provider'
-import { Main } from "@/components";
 import { WEB_SITE_NAME } from "@/constants";
 
 
@@ -33,9 +32,7 @@ export default async function RootLayout({
       <body className={poppins.className} >
 
         <ReduxProvider>
-          <Main >
-            {children}
-          </Main>
+          {children}
         </ReduxProvider>
 
         <script

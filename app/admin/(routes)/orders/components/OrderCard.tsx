@@ -11,7 +11,7 @@ export function OrderCard({ order, setIsModel }: OrderCardPropsType) {
 
     return (
         <div className='flex py-3  items-center gap-5 xl:text-sm lg:text-[0.7em] text-xs  hover:bg-gray-100 rounded-lg'>
-            <p className='w-3/12 text-center'>{order?.razorpay_order_id.split('_')[1]}</p>
+            <p className='w-3/12 text-center'>{order?.razorpay_order_id.split('_')[1]?.toUpperCase()}</p>
             <p className='w-2/12 text-center'>{getFormatDate(order?.createdAt.toString())}</p>
 
             <div className='w-3/12  gap-2 flex justify-center'>

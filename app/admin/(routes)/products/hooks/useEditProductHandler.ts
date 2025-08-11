@@ -19,16 +19,17 @@ const initialState = {
 }
 
 type EditProductPropsType = {
-    closeHandler: () => void
+    closeHandler: () => void;
+    fetchProducts: (page?: number, isFiltering?: boolean) => void;
 }
 
-export const useEditProductHandler = ({ closeHandler }: EditProductPropsType) => {
+export const useEditProductHandler = ({ closeHandler, fetchProducts }: EditProductPropsType) => {
     const [Errors, setErrors] = useState(initialState)
     const ProductDetails = useSelector((state: RootState) => state.UploadProductData);
     const dispatch = useDispatch<AppDispatch>();
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
     const sendMessage = createSendMessage()
-    const { isLoading } = useSelector((state: RootState) => state.AdminProducts)
+    const { isLoading, products, page } = useSelector((state: RootState) => state.AdminProducts)
 
     // Function to upload the product after validation
     const ProductUpload = useCallback(async (id: string, data: UploadFormData) => {
@@ -48,12 +49,17 @@ export const useEditProductHandler = ({ closeHandler }: EditProductPropsType) =>
         closeHandler()
         try {
             await dispatch(updateAdminProduct({ id, form })).unwrap()
-            sendMessage.success("Product update successfully")
+            const existingProduct = products.find((item) => item._id === id)
+            if (existingProduct?.category?.toLowerCase() !== data.category?.toLowerCase()) {
+                fetchProducts(page, true)
+            }
+
+            sendMessage.success("Product updated successfully")
         } catch (error) {
             sendMessage.error("Product update failed")
         }
 
-    }, [closeHandler, dispatch, sendMessage])
+    }, [closeHandler, dispatch, sendMessage, fetchProducts, page])
 
     // Validate the product details before uploading
     const validateHandler = useCallback(async () => {
@@ -82,7 +88,7 @@ export const useEditProductHandler = ({ closeHandler }: EditProductPropsType) =>
                 sendMessage.error(message)
             }
         }
-    }, [Errors, ProductDetails, selectedFile, ProductUpload])
+    }, [Errors, ProductDetails, selectedFile, ProductUpload, sendMessage])
 
     // Handler to change the input values and update the state
     const onChangeHandler = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

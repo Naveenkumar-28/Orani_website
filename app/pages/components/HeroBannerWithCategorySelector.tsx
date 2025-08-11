@@ -40,13 +40,13 @@ export const HeroBannerWithCategorySelector = memo(() => {
 
 
     return (
-        <main className=" lg:mb-32 relative 2xl:container mx-auto mb-10">
+        <main className=" lg:mb-32 relative  mx-auto mb-10">
 
             {/* Top bar */}
             <TopBarSection />
 
             {/* Hero Section */}
-            <div className="relative lg:h-[550px] xl:h-[600px] sm:h-[500px] h-[calc(100dvh-4rem)] ">
+            <div className="relative h-[calc(100vh-4rem)] lg:h-[calc(100vh-6.5rem)]">
                 <HeroTextSection />
                 <Image
                     className={`absolute top-0 left-0 h-full w-full object-cover -z-3`}

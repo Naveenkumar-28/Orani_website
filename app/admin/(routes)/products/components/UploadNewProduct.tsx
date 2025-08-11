@@ -7,6 +7,7 @@ import { bodyOverflowHandler } from '@/utils';
 import { useAddProductHandler } from '../hooks';
 import { InputField } from './InputField';
 import { ResetProductData } from '../redux';
+import { PreviewImage } from './PreviewImage';
 
 type PropsType = {
     onDismiss: (value: boolean) => void;
@@ -56,8 +57,8 @@ export function UploadNewProduct({ onDismiss, fetchProducts }: PropsType) {
     return (
         <section className={`fixed top-0 left-0 bottom-0  w-full h-full z-100 flex justify-end `}>
             <div className={`h-full bg-white lg:w-5/12 w-full sm:w-10/12 md:w-7/12 xl:w-4/12 duration-500 ${isActive ? "translate-x-0" : "translate-x-full"}`}>
-                <div className='flex justify-between items-center py-5 shadow-lg px-5 h-18'>
-                    <h1 className='font-medium text-lg'>Add New Product</h1>
+                <div className='flex justify-between items-center py-5 border-b border-gray-200 px-5 h-18'>
+                    <h1 className='font-medium md:text-xl text-lg'>Add New Product</h1>
                     <button onClick={closeHandler} className='text-3xl cursor-pointer hover:text-red-500'><IoCloseOutline /></button>
                 </div>
                 <section className='px-5 gap-5 flex flex-col overflow-y-scroll h-[calc(100%-4.5rem)]'>
@@ -83,9 +84,10 @@ export function UploadNewProduct({ onDismiss, fetchProducts }: PropsType) {
                                 <input onChange={fileHandler} id='file' accept='image/png,image/jpeg,image/jpg' type="file" className='hidden' />
                             </label>
                         ) : (
-                            <div className='rounded-sm overflow-hidden h-52 sm:h-62 ring-1 ring-green'>
-                                <img src={URL.createObjectURL(selectedFile)} className='h-full w-full object-contain' alt="Upload_Image" />
-                            </div>
+                            // <div className='rounded-sm overflow-hidden h-52 sm:h-62 ring-1 ring-green'>
+                            //     <img src={URL.createObjectURL(selectedFile)} className='h-full w-full object-contain' alt="Upload_Image" />
+                            // </div>
+                            <PreviewImage file={selectedFile} />
                         )}
                     </div>
                     {
@@ -99,9 +101,7 @@ export function UploadNewProduct({ onDismiss, fetchProducts }: PropsType) {
                     <Button className='mb-10' loading={isLoading} disabled={isLoading} loadingContent='Uploading . . .' onClick={onValidateHandler} title={"Upload"} />
                 </section>
             </div>
-            <div onClick={closeHandler} className='bg-neut h-full w-full absolute -z-1 bg-black opacity-50 cursor-pointer'>
-
-            </div>
+            <div onClick={closeHandler} className='bg-neut h-full w-full absolute -z-1 bg-black opacity-50'> </div>
         </section>
     )
 }

@@ -1,8 +1,7 @@
 "use client";
 import { RemoveNotifyMessage } from "@/app/redux/slices/NotifyMessageSlice";
 import React, { useEffect, useState } from "react";
-import { FaCircleCheck } from "react-icons/fa6";
-import { IoIosCheckmarkCircleOutline, IoMdClose } from "react-icons/io";
+import { IoMdClose } from "react-icons/io";
 import { MdCheckCircle } from "react-icons/md";
 import { PiWarningCircle } from "react-icons/pi";
 import { useDispatch } from "react-redux";
@@ -11,9 +10,10 @@ type NotifyMessageProps = {
     Message: string;
     id: Date;
     type?: string;
+    leftSide?: boolean;
 };
 
-export function NotifyMessage({ Message, id, type = "success" }: NotifyMessageProps) {
+export function NotifyMessage({ Message, id, type = "success", leftSide }: NotifyMessageProps) {
     const [isActive, setIsActive] = useState(false);
     const dispatch = useDispatch();
 
@@ -69,7 +69,7 @@ export function NotifyMessage({ Message, id, type = "success" }: NotifyMessagePr
 
     return (
         <div
-            className={`relative overflow-hidden transform transition-all self-end ease-in-out ${isActive ? "-translate-x-0 opacity-100" : "translate-x-full opacity-0"
+            className={`relative overflow-hidden transform transition-all self-end ease-in-out ${isActive ? `${leftSide ? "translate-x-0" : "-translate-x-0"} opacity-100` : `${leftSide ? "-translate-x-full" : "translate-x-full"} opacity-0`
                 } ${getColor(type)} duration-300 ease-in shadow-md rounded-md md:text-base text-sm text-white w-full`}
         >
             {/* Smooth timer bar at bottom */}

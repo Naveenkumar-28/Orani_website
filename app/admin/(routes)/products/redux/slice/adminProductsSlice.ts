@@ -10,6 +10,7 @@ interface ProductState {
     totalPage: number;
     page: number;
     isFiltering: boolean;
+    currentCachedKey: string
     cache: Record<string, cacheType>
 }
 interface cacheType {
@@ -25,7 +26,8 @@ const initialState: ProductState = {
     error: null,
     totalPage: 0,
     page: 1,
-    cache: {}
+    cache: {},
+    currentCachedKey: ''
 };
 
 
@@ -55,6 +57,7 @@ const adminProductSlice = createSlice({
                 state.totalPage = totalPage
                 state.page = page || 1
                 state.cache[cacheKey] = { products, totalPage }
+                state.currentCachedKey = cacheKey
             })
             .addCase(getAdminProducts.rejected, (state, action) => {
                 state.isSkeletonLoding = false;
@@ -81,22 +84,55 @@ const adminProductSlice = createSlice({
                 state.error = null;
             })
             .addCase(updateAdminProduct.fulfilled, (state, action) => {
-                const { updatedProduct } = action.payload
-                state.isSkeletonLoding = false
+                const { updatedProduct } = action.payload;
+                state.isSkeletonLoding = false;
                 state.isLoading = false;
-                state.products = state.products.map((product) => {
-                    return product._id === updatedProduct._id ? updatedProduct : product
-                })
-                // Update in all cached pages
-                Object.keys(state.cache)
-                    .forEach((cacheKey) => {
-                        const cached = state.cache[cacheKey];
-                        if (cached?.products) {
-                            cached.products = cached.products.map((item) =>
-                                item._id === updatedProduct._id ? updatedProduct : item
-                            );
+
+                const existingProduct = state.products.find((product) => product?._id == updatedProduct?._id);
+
+                if (!existingProduct) return;
+
+                let updatedProductsList = state.products; // Will store the final updated list
+
+                Object.keys(state.cache).forEach((cacheKey) => {
+                    const cacheKeyMatchUpdatedCategory = cacheKey.toLowerCase().includes(updatedProduct.category.toLowerCase());
+                    const cacheKeyMatchOldCategory = cacheKey.toLowerCase().includes(existingProduct.category.toLowerCase());
+                    const categoryAllMatch = cacheKey.toLowerCase().includes("category-all");
+                    const cached = state.cache[cacheKey];
+                    if (!cached?.products) return;
+
+
+                    // If product category changed and this cache is for the old category → delete
+                    if (cacheKeyMatchUpdatedCategory && existingProduct.category.toLowerCase() !== updatedProduct.category.toLowerCase()) {
+                        delete state.cache[cacheKey];
+                        return;
+                    }
+
+                    // If "all categories" cache → update product in place
+                    if (categoryAllMatch) {
+                        cached.products = cached.products.map((item) =>
+                            item._id === updatedProduct._id ? updatedProduct : item
+                        );
+                    }
+                    // If product still in same category → update in place
+                    else if (existingProduct.category.toLowerCase() === updatedProduct.category.toLowerCase()) {
+                        cached.products = cached.products.map((item) =>
+                            item._id === updatedProduct._id ? updatedProduct : item
+                        );
+                    } else {
+                        if (cacheKeyMatchOldCategory) {
+                            delete state.cache[cacheKey];
                         }
-                    });
+                    }
+
+                    // If this cacheKey matches the OLD category, set it as the current products
+                    if (state.currentCachedKey == cacheKey) {
+                        updatedProductsList = cached.products;
+                    }
+                })
+
+                // Update main state.products only once
+                state.products = updatedProductsList;
             })
             .addCase(updateAdminProduct.rejected, (state, action) => {
                 state.isLoading = false;

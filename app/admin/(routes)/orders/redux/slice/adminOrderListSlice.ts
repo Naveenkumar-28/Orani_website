@@ -82,6 +82,12 @@ const AdminOrderList = createSlice({
                 state.orders = state.orders.map((order) => {
                     return order._id == updatedOrder._id ? { ...order, orderStatus } : order
                 })
+
+                Object.keys(state.cache).forEach((cacheKey) => {
+                    const cacheOrders = state.cache[cacheKey]
+                    if (!cacheOrders) return
+                    cacheOrders.orders = cacheOrders.orders.map((item) => item._id == updatedOrder._id ? { ...item, orderStatus } : item)
+                })
             })
             .addCase(updateOrderStatus.rejected, (state, action) => {
                 state.isLoading = false

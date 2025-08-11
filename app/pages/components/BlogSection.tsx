@@ -21,7 +21,7 @@ export function BlogSection() {
                 <h1 className="text-center font-extrabold lg:text-4xl md:text-3xl text-3xl mb-1 text-gray-700">Our <span className='text-green'>Blogs</span></h1>
                 <div className='sm:text-sm text-xs font-light text-gray-400'>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque quae id, quisquam distinctio</div>
             </div>
-            <div className="grid lg:gap-5 sm:gap-5 gap-3 min-[480px]:grid-cols-2 grid-cols-1 lg:grid-cols-3 ">
+            <div className="grid lg:gap-5 sm:gap-5 gap-3 min-[480px]:grid-cols-2 grid-cols-1 lg:grid-cols-3">
                 {!loadingSkeleton ? (
                     <>
                         {blogs.map((blog, index) => (

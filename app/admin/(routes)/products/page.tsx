@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ProductCard } from "@/app/admin/components";
 import { RiFilter3Line } from 'react-icons/ri';
 import { UploadNewProduct, RemoveCard, EditProduct, ProductCardSkeleton } from "./components";
-import { IoCloseCircle } from 'react-icons/io5';
+import { IoClose } from 'react-icons/io5';
 import { Dropdown, FullScreenLoader, LoadingIndicator } from '@/components/';
 import { Pagination } from '@/app/pages/components';
 import { useDebounceEffect } from '@/hooks';
@@ -27,9 +27,9 @@ function ProductsSection() {
 
     const dispatch = useDispatch<AppDispatch>()
 
-    const fetchProducts = useCallback((Page?: number, isFiltering = false) => {
-        dispatch(getAdminProducts({ page: Page || 1, limit, category: categorySelect, search, isFiltering }))
-    }, [categorySelect, search, limit])
+    const fetchProducts = useCallback((Page?: number, isFiltering?: boolean) => {
+        dispatch(getAdminProducts({ page: Page || 1, limit, category: categorySelect, search, isFiltering: isFiltering || false }))
+    }, [categorySelect, search, limit, dispatch])
 
     useEffect(() => {
         if (products?.length > 0) return
@@ -41,25 +41,21 @@ function ProductsSection() {
             return firstRunRef.current = false
         }
         fetchProducts(1, true)
-    }, [search, categorySelect], 500)
-
-    const resetHandler = useCallback(() => {
-        setSearch('')
-        setCategorySelect('all')
-    }, [])
+    }, [search, categorySelect, fetchProducts], 500)
 
 
     return (
         <div className='py-2 sm:py-5 lg:px-7 px-5 min-h-dvh'>
-            <div className='flex flex-col md:flex-row justify-between items-center gap-4'>
-                <div className='flex  md:max-w-64 w-full items-center px-4 py-2 rounded-sm ring-2 ring-gray-300 focus-within:ring-green ' >
-                    <input aria-label='Search Products' value={search || ''} onChange={(e) => setSearch(e.target.value.trim().toLowerCase())} type="text" className='border-none outline-none w-full text-gray-500 placeholder:text-sm ' placeholder='Search Product' />
-                    {!search ? <IoIosSearch aria-label='Search-icon' className='text-2xl ml-2 text-gray-400' /> : <IoCloseCircle aria-label='Close-icon' onClick={() => setSearch('')} className='text-xl cursor-pointer hover:text-green ml-2 text-gray-400' />}
-
+            <div className='flex flex-col sm:flex-row justify-between items-center gap-4'>
+                <div className='flex xl:min-w-74 lg:min-w-68 md:min-w-64 sm:min-w-54 min-w-full md:text-sm text-xs md:h-11 h-10 items-center rounded-sm ring-2 ring-gray-300 focus-within:ring-green ' >
+                    <IoIosSearch aria-label='Search-icon' className='md:text-2xl text-xl md:w-12 w-10 text-gray-400 focus-within:text-green' />
+                    <input aria-label='Search orders' value={search || ''} onChange={(e) => setSearch(e.target.value.trim().toLowerCase())} type="text" className='border-none h-full outline-none flex-1 placeholder:text-gray-400 text-gray-600 md:placeholder:text-base placeholder:text-sm text-sm' placeholder='Search a products' />
+                    {search && <IoClose aria-label='Close-icon' onClick={() => setSearch('')} className='text-xl cursor-pointer hover:text-green md:w-12 w-10 text-gray-400' />}
                 </div>
-                <div className='flex items-center md:justify-end justify-between w-full md:gap-5 gap-4 flex-col sm:flex-row'>
-                    <Dropdown dropdownHeight=' h-10' icon={<RiFilter3Line className='text-lg text-gray-400' />} dropdownInputPadding='py-2' status={categorySelect} dropdownOuterWidth='w-full md:w-44 sm:w-6/12' dropdownPosition='top-12' onClick={setCategorySelect} renderItems={["all", "oranges", "juice", "vegetables", "fruits"]} />
-                    <button onClick={() => setAddNewProductModelOpen(true)} className='bg-green shadow-lg text-white px-3 py-2 rounded-md cursor-pointer ring-2 ring-gray-300 active:ring-green hover:opacity-95 w-full sm:w-6/12 md:w-max flex items-center gap-2'>
+
+                <div className='flex items-center md:justify-end justify-between sm:w-fit w-full md:gap-5 gap-4 flex-col min-[425px]:flex-row'>
+                    <Dropdown dropdownHeight='md:h-11 h-10' icon={<RiFilter3Line className='text-lg text-gray-400' />} dropdownInputPadding='py-2' status={categorySelect} dropdownOuterWidth='w-full md:w-44 sm:w-6/12' dropdownPosition='top-12' onClick={setCategorySelect} renderItems={["all", "oranges", "juices", "vegetables", "fruits"]} />
+                    <button onClick={() => setAddNewProductModelOpen(true)} className='bg-green shadow-lg text-white md:h-11 h-10 px-4 rounded-md cursor-pointer ring-2 ring-green active:ring-3 hover:opacity-95 w-full sm:w-6/12 md:w-max flex items-center gap-2'>
                         <IoMdAdd className='text-lg' />
                         New Product
                     </button>
@@ -93,7 +89,7 @@ function ProductsSection() {
                 </>
             ) : (
                 // Loading Skeleton 
-                <div className='py-5 pt-10 grid lg:grid-cols-3 grid-cols-2 xl:grid-cols-4 sm:grid-cols-3 gap-5 mb-20'>
+                <div className='py-5 pt-10 grid lg:grid-cols-3 grid-cols-1 min-[400px]:grid-cols-2 xl:grid-cols-4 sm:grid-cols-3 gap-5 mb-20 '>
                     {Array.from({ length: limit }).map((_, index) => (
                         <ProductCardSkeleton key={index} />
                     ))}
@@ -108,7 +104,7 @@ function ProductsSection() {
             )}
 
             {isAddNewProductModelOpen && <UploadNewProduct fetchProducts={fetchProducts} onDismiss={setAddNewProductModelOpen} />}
-            {isEditModelOpen && <EditProduct onDismiss={setEditModelOpen} product={isEditModelOpen} />}
+            {isEditModelOpen && <EditProduct fetchProducts={fetchProducts} onDismiss={setEditModelOpen} product={isEditModelOpen} />}
             {isRemoveModelOpen && <RemoveCard onDismiss={setRemoveModelOpen} fetchProducts={fetchProducts} product={isRemoveModelOpen} />}
             <FullScreenLoader loadingState={isLoading} />
         </div>

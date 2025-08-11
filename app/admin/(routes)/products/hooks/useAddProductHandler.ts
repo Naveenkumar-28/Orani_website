@@ -1,12 +1,11 @@
 import { AppDispatch, RootState } from '@/app/redux/store';
-import api from '@/lib/axios';
 import { createSendMessage } from '@/utils';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from "yup";
 import { newProductSchema } from '../utils';
 import { FormErrors, UploadFormData, useAddProductHandlerPropsType } from '../types';
-import { AddAdminProducts, getAdminProducts, resetAdminProducts, SetProductData } from '../redux';
+import { AddAdminProducts, SetProductData } from '../redux';
 
 const initialState = {
     name: { error: false, success: true },
@@ -45,7 +44,7 @@ export const useAddProductHandler = ({ closeHandler, fetchProducts }: useAddProd
         try {
             await dispatch(AddAdminProducts(form)).unwrap()
             fetchProducts(page, true)
-            sendMessage.success("Product upload Successfully")
+            sendMessage.success("Product uploaded Successfully")
 
         } catch (error) {
             console.log(error)
@@ -91,8 +90,14 @@ export const useAddProductHandler = ({ closeHandler, fetchProducts }: useAddProd
         if (!file) return
 
         const maxSize = 1 * 1024 * 1024
-        if (!(file.size < maxSize)) {
-            return sendMessage.error("Image size exceeds the 1MB limit")
+
+        if (!file.type.startsWith("image/")) {
+            sendMessage.error("Please upload a valid image file");
+            return;
+        }
+        if (file.size >= maxSize) {
+            sendMessage.error("Image size exceeds the 1MB limit");
+            return;
         }
         setSelectedFile(file)
 
@@ -105,8 +110,13 @@ export const useAddProductHandler = ({ closeHandler, fetchProducts }: useAddProd
         const file = e?.dataTransfer?.files?.[0]
         if (!file) return
         const maxSize = 1 * 1024 * 1024
-        if (!(file.size < maxSize)) {
-            return sendMessage.error("Image size exceeds the 1MB limit")
+        if (!file.type.startsWith("image/")) {
+            sendMessage.error("Please upload a valid image file");
+            return;
+        }
+        if (file.size >= maxSize) {
+            sendMessage.error("Image size exceeds the 1MB limit");
+            return;
         }
         setSelectedFile(file)
 

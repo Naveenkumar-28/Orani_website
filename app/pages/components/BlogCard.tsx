@@ -6,11 +6,11 @@ import { TbMessage } from 'react-icons/tb'
 export function BlogCard({ blog }: { blog: BlogType }) {
     return (
         <div
-            className="sm:max-w-fit border-gray-100 rounded-md overflow-hidden md:w-full pb-3 duration-200 border-2 md:hover:border-green active:scale-95 md:hover:shadow-lg">
-            <div className="w-full xl:h-62 sm:h-44 h-36 overflow-hidden">
+            className="sm:max-w-fit border-gray-100 rounded-md overflow-hidden md:w-full duration-200 border-2 md:hover:border-green active:scale-95 md:hover:shadow-lg">
+            <div className="min-[480px]:h-48 w-full xl:h-62 sm:h-52 h-48 overflow-hidden">
                 <img src={blog?.imageUrl} className="w-full h-full object-cover" alt={blog?.title} />
             </div>
-            <div className="w-full px-5 py-2 overflow-hidden">
+            <div className="w-full px-5 py-3 overflow-hidden">
                 <div className="flex gap-5 items-center text-gray-400 mb-2">
                     <div className="flex gap-1 items-center sm:text-xs text-[0.6rem]">
                         <IoCalendar />

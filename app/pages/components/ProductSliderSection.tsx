@@ -16,34 +16,35 @@ export function ProductSliderSection() {
 
     const dispatch = useDispatch<AppDispatch>()
 
-    // //Getting product list from API
+    //Getting product list from server
     useEffect(() => {
         if (bestReviewedProducts.length > 0 && latestProducts.length > 0 && topRatedProducts.length > 0) return
         dispatch(fetchProductSliders())
     }, [])
 
     return (
-        <section
-            className="mediaQuary relative select-none mb-5 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10">
 
-            {productSliderData.map((product, index) =>
-            (
-                <div key={index} className=" w-full ">
-                    <ProductHeaderAndMenu
-                        callback={product.onclick}
-                        title={product.title}
-                        isLoading={isLoading}
-                        name={product.name}
-                    />
+        <section className="mediaQuary overflow-hidden  relative select-none mb-5 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10">
+            <>
+                {productSliderData.map((product, index) =>
+                (
+                    <div key={index} className="w-full">
+                        <ProductHeaderAndMenu
+                            callback={product.onclick}
+                            title={product.title}
+                            isLoading={isLoading}
+                            name={product.name}
+                        />
 
-                    <ProductsSlider
-                        ref={product.ref}
-                        products={product.products}
-                        isLoading={isLoading}
-                    />
-                </div>
-            )
-            )}
+                        <ProductsSlider
+                            ref={product.ref}
+                            products={product.products}
+                            isLoading={isLoading}
+                        />
+                    </div>
+                )
+                )}
+            </>
         </section>
     )
 }

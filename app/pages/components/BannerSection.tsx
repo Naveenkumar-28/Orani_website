@@ -5,7 +5,7 @@ export function BannerSection() {
     const router = useRouter()
     return (
         <section id="banner_section"
-            className="2xl:container mx-auto grid grid-cols-1 sm:auto-rows-[220px] auto-rows-[200px] md:auto-rows-[280px] lg:auto-rows-[300px]  xl:auto-rows-[400px] w-full sm:gap-10 gap-5 lg:mb-32 mb-10">
+            className=" mx-auto grid grid-cols-1 sm:auto-rows-[220px] auto-rows-[200px] md:auto-rows-[280px] lg:auto-rows-[300px]  xl:auto-rows-[400px] w-full sm:gap-10 gap-5 lg:mb-32 mb-10">
             <div onClick={() => router.push(`/pages/shop?category=${'fruits'}`)} className="w-full h-full  overflow-hidden ">
                 <div className=" w-full h-full justify-end flex">
                     <div

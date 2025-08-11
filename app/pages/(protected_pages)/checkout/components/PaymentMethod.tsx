@@ -44,9 +44,9 @@ export const PaymentMethod = memo(() => {
 
     return (
         <>
-            <form className="border border-gray-200 px-5 pt-5 pb-8 flex flex-col gap-5 w-full">
+            <form className="border border-gray-200 px-5 pt-5 pb-8 flex flex-col gap-5 w-full rounded-sm">
                 <h5 className="lg:text-xl text-lg font-normal sm:text-xl">Payment Method</h5>
-                <div className="flex gap-5 flex-col px-5 ">
+                <div className="flex gap-5 flex-col px-5">
                     <div className=" flex justify-start items-center gap-2 cursor-pointer">
                         <input className='accent-green-600 size-3.5' onClick={() => setSelelctPaymentMethod('CreditCart')} id="CreditCard" name="select_payment" type="radio" />
                         <label htmlFor="CreditCard" className="text-gray-600  cursor-pointer md:text-base text-sm">Credit Cart Payment</label>

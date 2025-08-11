@@ -1,10 +1,10 @@
 import React from 'react'
 import { IoMdHeart } from 'react-icons/io'
 import { PiShoppingCartFill } from 'react-icons/pi'
-import { UserProfile } from './UserProfile'
 import { useRouter } from 'next/navigation'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/app/redux/store'
+import { UserProfile } from './UserProfile'
 
 export function HeaderActions({ closeTopDrawerHandler = () => { }, mobileMode = false }: { closeTopDrawerHandler?: () => void, mobileMode?: boolean }) {
     const router = useRouter()

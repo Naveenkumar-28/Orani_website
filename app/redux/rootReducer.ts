@@ -40,20 +40,7 @@ const appReducer = combineReducers({
 const rootReducer = (state: ReturnType<typeof appReducer> | undefined, action: any) => {
 
     if (authLogout.fulfilled.match(action)) {
-
-        return appReducer({
-            ...state,
-            AdminOrders: undefined,
-            AdminProducts: undefined,
-            OrderList: undefined,
-            OverallSummary: undefined,
-            UploadProductData: undefined,
-            UserDetails: undefined,
-            CartItems: undefined,
-            WishItems: undefined,
-            Addresses: undefined,
-        }, action);
-
+        return appReducer(undefined, action);
     }
     return appReducer(state, action);
 };

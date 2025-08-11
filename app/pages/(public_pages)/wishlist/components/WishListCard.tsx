@@ -9,7 +9,7 @@ import { AppDispatch, RootState } from '@/app/redux/store'
 import { StarRating } from '@/app/pages/components'
 import { createSendMessage } from '@/utils/sendMessage/createSendMessage'
 import { useRouter } from 'next/navigation'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { useThrottleCallback } from '@/hooks'
 
 type wishListCardProps = {
@@ -19,15 +19,24 @@ export function WishListCard({ product }: wishListCardProps) {
     const router = useRouter()
     const dispatch = useDispatch<AppDispatch>()
     const sendMessage = createSendMessage()
-    const { localStorageCartList, isLoading } = useSelector((state: RootState) => state.CartItems)
+    const [isLoading, setLoading] = useState(false)
+    const { localStorageCartList } = useSelector((state: RootState) => state.CartItems)
 
-    const handleAddToCart = useCallback((id: string) => {
+    const handleAddToCart = useCallback(async (id: string) => {
         if (isLoading) return;
+
         if (product?.stock) {
             const isAlreadyInCart = localStorageCartList.find(item => item?._id == id)
             if (!isAlreadyInCart) {
-                dispatch(addCart({ _id: id }))
-                sendMessage.info('This product added to Cart')
+                setLoading(true)
+                try {
+                    await dispatch(addCart({ _id: id })).unwrap()
+                    sendMessage.info('This product added to Cart')
+                } catch (err) {
+
+                } finally {
+                    setLoading(false)
+                }
             } else {
                 sendMessage.warning('This product already in Cart')
             }
@@ -35,7 +44,7 @@ export function WishListCard({ product }: wishListCardProps) {
             sendMessage.error('This product Out of the Stock')
         }
 
-    }, [localStorageCartList, sendMessage])
+    }, [localStorageCartList, sendMessage, isLoading, product])
 
     const throttledAddToCart = useThrottleCallback(handleAddToCart, 1000)
 
@@ -85,7 +94,7 @@ export function WishListCard({ product }: wishListCardProps) {
                         )}
                     </div>
                 </div>
-                <Button className='w-max text-sm lg:text-base' title='Add to Cart' disabled={!product.stock || isLoading} onClick={() => throttledAddToCart(product?._id)} />
+                <Button loading={isLoading} loadingContent='Adding . . .' className='w-max text-sm lg:text-base' title='Add to Cart' disabled={!product.stock || isLoading} onClick={() => throttledAddToCart(product?._id)} />
             </div>
         </div>
     )

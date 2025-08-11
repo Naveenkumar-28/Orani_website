@@ -45,7 +45,7 @@ export function SpecificProduct({ product }: { product: ProductType }) {
             sendMessage.error('This product Out of the Stock')
         }
 
-    }, [product, quantity, localStorageCartList, isCartLoading, dispatch])
+    }, [product, quantity, localStorageCartList, isCartLoading, dispatch, sendMessage])
 
     //Product add to wishList functionality 
     const HandleAddToWish = useCallback(() => {
@@ -57,7 +57,7 @@ export function SpecificProduct({ product }: { product: ProductType }) {
             dispatch(addWish({ _id: product._id }))
             sendMessage.info('This product added to wishlist')
         }
-    }, [quantity, localStorageWishList, isWishLoading, dispatch])
+    }, [quantity, localStorageWishList, isWishLoading, dispatch, sendMessage, product])
 
     const throttledAddToCart = useThrottleCallback(handleAddToCart, 1000)
     const throttledAddToWish = useThrottleCallback(HandleAddToWish, 1000)

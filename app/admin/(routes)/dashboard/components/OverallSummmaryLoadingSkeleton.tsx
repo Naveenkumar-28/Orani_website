@@ -7,11 +7,11 @@ import { RecentOrdersSkeleton } from './RecentOrdersSkeleton'
 
 export function OverallSummmaryLoadingSkeleton() {
     return (
-        <div className="px-5 flex sm:gap-5 gap-2 mb-10 flex-col animate-pulse">
-            <div className="flex sm:gap-5 gap-2 xl:flex-row flex-col">
+        <div className="px-5 flex sm:gap-5 gap-3 mb-10 flex-col animate-pulse">
+            <div className="flex sm:gap-5 gap-3 xl:flex-row flex-col">
 
                 {/* Left Section: BusinessOverview + OrderSummaryChart */}
-                <div className="xl:w-8/12 flex flex-col sm:gap-5 gap-2 lg:max-h-full">
+                <div className="xl:w-8/12 flex flex-col sm:gap-5 gap-3 lg:max-h-full">
                     {/* BusinessOverview Skeleton */}
                     <BusinessOverviewSkeleton />
 
@@ -20,7 +20,7 @@ export function OverallSummmaryLoadingSkeleton() {
                 </div>
 
                 {/* Right Section: TopProducts + OverAllReviews */}
-                <div className="xl:w-4/12 flex xl:flex-col md:flex-row flex-col sm:gap-5 gap-2 justify-between">
+                <div className="xl:w-4/12 flex xl:flex-col md:flex-row flex-col sm:gap-5 gap-3 justify-between">
                     {/* TopProducts Skeleton */}
                     <TopProductsSkeleton />
 

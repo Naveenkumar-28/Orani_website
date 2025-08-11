@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react"
-import { authLogout, changeProfilePic, userReset } from '@/app/redux'
+import { authLogout, changeProfilePic } from '@/app/redux'
 import { useDispatch } from "react-redux"
 import { AppDispatch } from "@/app/redux/store"
 import { createSendMessage } from "@/utils"
@@ -23,9 +23,8 @@ export const useUserhandler = ({ logoutConfirmationCloseHandler }: { logoutConfi
         setIsLoading(true)
         try {
             await dispatch(authLogout()).unwrap()
-            dispatch(userReset())
             sendMessage.success("Logout successfully!")
-            router.replace('/pages')
+            router.replace('/auth/login')
         } catch (error) {
             sendMessage.error("logout failed")
         } finally {

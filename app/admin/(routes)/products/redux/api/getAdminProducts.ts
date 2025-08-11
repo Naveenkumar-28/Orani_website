@@ -10,7 +10,7 @@ type getProductsProps = {
     isFiltering?: boolean
 }
 
-export const getAdminProducts = createAsyncThunk('AdminProducts/get', async ({ page = 1, limit = 9, category = 'all', search = '', isFiltering = false }: getProductsProps, { rejectWithValue, getState }) => {
+export const getAdminProducts = createAsyncThunk('AdminProducts/get', async ({ page = 1, limit = 9, category = 'all', search = '' }: getProductsProps, { rejectWithValue, getState }) => {
 
     const cacheKey = `product_page-${page}_limit-${limit}_category-${category || ''}_search-${search || ''}`
     const state = getState() as RootState

@@ -10,12 +10,11 @@ type BlogSearchInputType = {
 
 export function BlogSearchInput({ search, setSearch, className = 'flex' }: BlogSearchInputType) {
     return (
-        <div className={` ${className} border-2 border-gray-300 focus-within:border-green rounded-sm h-12 items-center`}>
-            <input value={search || ''} onChange={(e) => setSearch(e.target.value)} type="text" className="w-10/12 ps-3 h-full outline-none placeholder:italic text-gray-500"
+        <div className={` ${className} border-2 border-gray-300 focus-within:border-green rounded-md h-12 items-center`}>
+            <IoSearchOutline className='text-gray-400 w-12 text-2xl' />
+            <input value={search || ''} onChange={(e) => setSearch(e.target.value)} type="text" className="h-full focus:w-[calc(100%-6rem)] w-[calc(100%-3rem)] outline-none placeholder:italic placeholder:text-gray-400 text-gray-500"
                 placeholder="Search" />
-            <div className="w-2/12 text-xl flex justify-center cursor-pointer hover:text-green" >
-                {search ? <IoIosCloseCircle className='text-gray-400 hover:text-green' onClick={() => setSearch('')} /> : <IoSearchOutline className='text-gray-300' />}
-            </div>
+            {search && <IoIosCloseCircle className='text-gray-400 hover:text-green w-12 text-xl cursor-pointer' onClick={() => setSearch('')} />}
         </div>
     )
 }

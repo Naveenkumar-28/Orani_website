@@ -2,7 +2,7 @@ import React from 'react'
 
 export function BusinessOverviewSkeleton() {
     return (
-        <div className="w-full sm:gap-5 gap-2 lg:min-h-3/12 grid grid-cols-2 sm:grid-cols-3 animate-pulse">
+        <div className="w-full sm:gap-5 gap-3 lg:min-h-3/12 grid grid-cols-2 sm:grid-cols-3 animate-pulse">
             {/* Card 1 */}
             <div className=" ring-1 ring-gray-200 rounded-md px-5 py-5 gap-4 flex flex-col">
                 <div className="rounded-sm bg-gray-300 lg:size-10 md:size-8 sm:size-7 size-6" />

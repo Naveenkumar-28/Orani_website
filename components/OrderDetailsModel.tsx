@@ -44,15 +44,13 @@ export function OrderDetailsModel({
     //Order Status update handler
     const OrderStatusUpdateHandler = useCallback(async (id: string) => {
         if (!orderStatus) return sendMessage.error('Please Choose Order status')
+        bodyOverflowHandler(false)
+        closerHandler(null)
         try {
             await dispatch(updateOrderStatus({ id, status: orderStatus })).unwrap()
-            sendMessage.info("Order status update successfully")
+            sendMessage.info("Order status updated successfully")
         } catch (error) {
             sendMessage.error("Order status update failed")
-        } finally {
-            bodyOverflowHandler(false)
-            closerHandler(null)
-
         }
     }, [sendMessage, bodyOverflowHandler, closerHandler, orderStatus, dispatch])
 
@@ -93,7 +91,7 @@ export function OrderDetailsModel({
                             order.orderStatus.toLowerCase() !== "delivered" && (
 
                                 <div className='px-5 mb-5 flex flex-col gap-5 '>
-                                    <Dropdown dropdownHeight='h-12' dropdownPosition='bottom-12' status={orderStatus || order?.orderStatus} renderItems={["pending", "confirmed", "shipping", "delivered", "cancelled"]} onClick={setOrderStatus} />
+                                    <Dropdown dropdownHeight='h-12' dropdownPosition='bottom-12' status={orderStatus || order?.orderStatus} renderItems={["confirmed", "shipping", "delivered", "cancelled"]} onClick={setOrderStatus} />
 
                                     <Button loading={loading} disabled={loading} loadingContent='Updating . . .' onClick={() => OrderStatusUpdateHandler(order?._id)} title={"Update Order Status"} />
                                 </div>

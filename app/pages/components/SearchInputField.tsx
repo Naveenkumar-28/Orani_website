@@ -32,7 +32,7 @@ export const SearchInputField = memo(({ categorySelect }: { categorySelect: stri
     return (
         <div className="flex relative items-center lg:w-8/12 md:w-8/12 w-full max-h-12 xl:h-12">
             {/* Search input field */}
-            <div className='md:w-9/12 h-full w-full outline-0 bg-white ps-5 border rounded-ss-sm rounded-es-sm border-gray-300 flex items-center justify-between'>
+            <div className='md:w-9/12 h-full w-full outline-0 bg-white xl:ps-5 ps-3 border rounded-ss-sm rounded-es-sm border-gray-300 flex items-center justify-between'>
                 <input
                     onBlur={() => setTimeout(() => setIsFocused(false), 300)}
                     onFocus={() => setIsFocused(true)}
@@ -54,14 +54,14 @@ export const SearchInputField = memo(({ categorySelect }: { categorySelect: stri
 
             {/* Conditional rendering of suggestions */}
             {isFocused && search && (
-                <div className="absolute overflow-y-auto max-h-72 bg-white rounded-md top-13 shadow-md z-10 md:w-9/12 w-full">
+                <div className="absolute overflow-y-auto max-h-72 bg-white rounded-md xl:top-13 top-11 shadow-md z-10 md:w-9/12 w-full">
                     <ul>
                         {loading ? <li className='w-full text-gray-600 px-3 h-9 flex justify-center items-center text-sm'>Loading...</li> :
                             suggestions.length > 0 && !loading ? (
                                 suggestions.map((product, index) => (
                                     <SuggestionCard key={index} product={product} search={search} onClickHandler={onClickHandler} />
                                 ))) : (
-                                <li className='w-full text-gray-600 px-3 h-9 flex justify-center items-center text-sm'>No suggestion found</li>
+                                <li className='w-full text-gray-600 px-3 h-9 flex justify-center items-center text-sm'>No found</li>
                             )
                         }
                     </ul>

@@ -12,6 +12,7 @@ import { getUserdetails } from "../redux/api";
 import { getDbCartList, setTolocalStorageCartList } from './(public_pages)/cart/redux';
 import { getDbWishList, setTolocalStorageWishList } from './(public_pages)/wishlist/redux';
 import { useResetBodyOnPathChange } from '@/hooks/useResetBodyOnPathChange';
+import { NotifyContainer } from '@/components';
 
 export default function RootLayout({
     children,
@@ -48,7 +49,7 @@ export default function RootLayout({
 
     return (
         <>
-
+            <NotifyContainer />
             {/* Header */}
             <header className="relative lg:h-8 w-full z-[99] bg-green text-white  hidden lg:block ">
                 <div className="lg:flex justify-between items-center h-full mediaQuary">
@@ -60,7 +61,7 @@ export default function RootLayout({
                     <div className="font-semiblod uppercase text-[12px] flex items-center gap-1">
                         <FaTruckFast className="text-sm" />
 
-                        <h1>Free Shipping for all Order of ₹99</h1>
+                        <h1>Free Shipping for above ₹500 order</h1>
                     </div>
 
                     <div className="font-semiblod uppercase text-[12px] flex items-center gap-1">

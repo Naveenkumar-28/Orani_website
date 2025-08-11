@@ -23,6 +23,8 @@ export default function LoginScreen() {
                 <div className="flex gap-2 font-light md:text-sm text-xs">
                     <span className="text-gray-500">you don't have a account ?</span>
                     <Link href='/auth/register' className="text-green font-medium hover:underline underline-offset-2">Register</Link>
+                    <span className="text-gray-500">OR</span>
+                    <Link href='/pages' className="text-green font-medium hover:underline underline-offset-2 capitalize">Visit guest</Link>
                 </div>
                 <Button title="Login" loading={isLoading} disabled={isLoading} className="w-full uppercase md:text-base text-sm" />
             </form>

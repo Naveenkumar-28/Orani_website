@@ -1,10 +1,10 @@
 import React, { RefObject } from 'react'
 import { ProductSliderCard } from './ProductSliderCard'
 import { ProductSliderType } from '@/app/types'
+import { ProductSliderCardSkeleton } from './ProductSliderCardSkeleton';
 import Slider from 'react-slick'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { ProductSliderCardSkeleton } from './ProductSliderCardSkeleton';
 
 export function ProductsSlider({ products = [], isLoading, ref }: { ref: RefObject<Slider | null>, products: ProductSliderType[], isLoading: boolean }) {
 

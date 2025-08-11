@@ -1,5 +1,5 @@
 
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 import { CategoryCard } from './CategoryCard';
 import "slick-carousel/slick/slick.css";
@@ -60,8 +60,7 @@ export function ProductCategorieSlider() {
 
 
     return (
-        <section
-            className="product_container container lg:px-20 mx-auto px-5 md:px-20 2xl:px-52 select-none lg:mb-20">
+        <section className=" mediaQuary overflow-hidden lg:mb-20 min-h-80">
             <div className="relative">
                 <Slider ref={sliderRef} {...settings}>
                     {categoryList.map((category, index) => {
@@ -72,14 +71,13 @@ export function ProductCategorieSlider() {
                 </Slider>
 
                 {/* Absolute positioned navigation */}
-                <div
-                    className="absolute hidden min-[480px]:flex z-30 left-0 top-0  w-full h-full justify-between items-center pointer-events-none">
+                <div className="absolute hidden min-[480px]:flex z-30 left-0 top-0  w-full h-full justify-between items-center pointer-events-none">
                     <div aria-label='next_button' onClick={next}
-                        className=" text-2xl absolute top-1/2 -translate-y-1/2  md:right-[100%] right-0 shadow-md  border bg-white active:scale-95 duration-200 hover:text-green border-gray-200 px-1 py-4 rounded-sm pointer-events-auto cursor-pointer">
+                        className=" text-2xl absolute top-1/2 -translate-y-1/2 left-0 md:-left-9 shadow-md border bg-white active:scale-95 duration-200 hover:text-green border-gray-200 px-1 py-4 rounded-sm pointer-events-auto cursor-pointer">
                         <IoIosArrowBack />
                     </div>
                     <div aria-label='previous_button' onClick={previous}
-                        className=" text-2xl absolute top-1/2 -translate-y-1/2 md:left-[100%] shadow-md border bg-white active:scale-95 duration-200 hover:text-green border-gray-200 px-1 py-4 rounded-sm pointer-events-auto cursor-pointer">
+                        className=" text-2xl absolute top-1/2 -translate-y-1/2 right-0 md:-right-9 shadow-md border bg-white active:scale-95 duration-200 hover:text-green border-gray-200 px-1 py-4 rounded-sm pointer-events-auto cursor-pointer">
                         <IoIosArrowForward />
                     </div>
                 </div>

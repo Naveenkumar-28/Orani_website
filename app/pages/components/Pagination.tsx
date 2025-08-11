@@ -35,19 +35,19 @@ export function Pagination({ length, page, callback }: paginationProps) {
                     <button
                         onClick={onForward}
                         disabled={page === 1}
-                        className={`sm:text-5xl text-xl size-10 flex justify-center items-center outline-none text-green rounded-full p-2  duration-100 ${page === 1 ? "opacity-50 cursor-not-allowed" : "active:scale-95 cursor-pointer hover:ring-1"
+                        className={`sm:text-5xl text-xl sm:size-11 size-10 flex justify-center items-center outline-none text-green rounded-full p-2  duration-100 ${page === 1 ? "opacity-50 cursor-not-allowed" : "active:scale-95 cursor-pointer hover:ring-1"
                             }`}
                     >
                         <MdOutlineArrowBackIosNew />
                     </button>
-                    <ul className='flex sm:gap-4 gap-2'>
+                    <ul className='flex sm:gap-4 gap-2 min-[375px]:gap-2.5'>
                         {getPageRange(page, length).map((p, index) => (
                             <li
                                 key={index}
                                 onClick={() => typeof p === "number" && numberClick(p)}
                                 className={` cursor-pointer flex justify-center items-center md:text-base text-sm 
                                              ${p === page ? "bg-green text-white ring-green" : "text-gray-400 ring-gray-300"}
-                                              ${p === "..." ? "pointer-events-none cursor-not-allowed" : "ring-1 rounded-full shadow-sm sm:size-10 size-9"}
+                                              ${p === "..." ? "pointer-events-none cursor-not-allowed" : "ring-1 rounded-full shadow-sm min-[375px]:size-10 sm:size-11 size-9"}
                                           `} >
                                 {p}
                             </li>
@@ -57,7 +57,7 @@ export function Pagination({ length, page, callback }: paginationProps) {
                     <button
                         onClick={onNext}
                         disabled={page === length}
-                        className={`sm:text-3xl text-xl size-10 flex justify-center items-center outline-none text-green rounded-full p-2  duration-100 ${page === length ? "opacity-50 cursor-not-allowed" : "active:scale-95  cursor-pointer hover:ring-1"
+                        className={`sm:text-3xl text-xl sm:size-11 size-10 flex justify-center items-center outline-none text-green rounded-full p-2  duration-100 ${page === length ? "opacity-50 cursor-not-allowed" : "active:scale-95  cursor-pointer hover:ring-1"
                             }`}
                     >
                         <MdOutlineArrowForwardIos />

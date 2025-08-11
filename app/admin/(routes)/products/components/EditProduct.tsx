@@ -2,7 +2,6 @@ import React, { SetStateAction, useCallback, useEffect, useRef, useState } from 
 import { IoCloseOutline } from 'react-icons/io5'
 import { Button } from "@/components";
 import { useDispatch, useSelector } from 'react-redux';
-import { useDebounceEffect } from '@/hooks';
 import { bodyOverflowHandler } from '@/utils';
 import { createSendMessage } from '@/utils';
 import { RootState } from '@/app/redux/store';
@@ -12,13 +11,15 @@ import { ProductType } from '../../../types';
 import { TbArrowsExchange } from 'react-icons/tb';
 import { ResetProductData, SetProductData } from '../redux';
 import { ProductCardType } from '../types';
+import { PreviewImage } from './PreviewImage';
 
 type PropsType = {
     onDismiss: React.Dispatch<SetStateAction<ProductCardType | null>>
-    product: ProductType
+    product: ProductType,
+    fetchProducts: (page?: number, isFiltering?: boolean) => void;
 }
 
-export function EditProduct({ onDismiss, product }: PropsType) {
+export function EditProduct({ onDismiss, product, fetchProducts }: PropsType) {
     const [isActive, setIsActive] = useState(false)
     const dispatch = useDispatch()
     const ProductDetails = useSelector((state: RootState) => state.UploadProductData)
@@ -43,7 +44,7 @@ export function EditProduct({ onDismiss, product }: PropsType) {
         selectedFile,
         setSelectedFile,
         validateHandler
-    } = useEditProductHandler({ closeHandler })
+    } = useEditProductHandler({ closeHandler, fetchProducts })
 
     // Set the initial state of the component when it mounts
     useEffect(() => {
@@ -78,20 +79,27 @@ export function EditProduct({ onDismiss, product }: PropsType) {
         const file = e?.target?.files?.[0]
         if (!file) return
         const maxSize = 1 * 1024 * 1024
-        if (!(file.size < maxSize)) {
-            sendMessage.error("Image size exceeds the 1MB limit")
-            return
+
+        if (!file.type.startsWith("image/")) {
+            sendMessage.error("Please upload a valid image file");
+            return;
         }
+        if (file.size >= maxSize) {
+            sendMessage.error("Image size exceeds the 1MB limit");
+            return;
+        }
+
         setSelectedFile(file)
     }, [sendMessage])
+
 
 
 
     return (
         <section className='fixed top-0 left-0 bottom-0  w-full h-full z-100 flex justify-end'>
             <div className={`h-full bg-white lg:w-5/12 w-full sm:w-10/12 md:w-7/12 xl:w-4/12 duration-500 ${isActive ? "translate-x-0" : "translate-x-full"} `}>
-                <div className='flex justify-between items-center shadow-lg px-5 h-18'>
-                    <h1 className='font-medium text-lg'>Edit Product</h1>
+                <div className='flex justify-between items-center px-5 h-18 border-b border-gray-200'>
+                    <h1 className='font-medium md:text-xl text-lg'>Edit Product</h1>
                     <button title='Close' onClick={closeHandler} className='text-3xl cursor-pointer hover:text-red-500'><IoCloseOutline /></button>
                 </div>
                 <section className='px-5 gap-5 flex flex-col overflow-y-scroll h-[calc(100%-4.5rem)] pb-10'>
@@ -116,9 +124,7 @@ export function EditProduct({ onDismiss, product }: PropsType) {
                                 )}
                             </div>
                         ) : (
-                            <div className='rounded-sm overflow-hidden h-52 sm:h-62 ring-1 ring-green'>
-                                <img src={URL.createObjectURL(selectedFile)} className='h-full w-full object-contain' alt="Upload_Image" />
-                            </div>
+                            <PreviewImage file={selectedFile} />
                         )}
 
                     </div>
@@ -133,9 +139,7 @@ export function EditProduct({ onDismiss, product }: PropsType) {
                     <Button disabled={isLoading} loading={isLoading} onClick={validateHandler} loadingContent='Updating . . . ' title={"Update"} />
                 </section>
             </div>
-            <div onClick={closeHandler} className=' h-full w-full absolute -z-1 bg-black opacity-50 cursor-pointer'>
-
-            </div>
+            <div onClick={closeHandler} className=' h-full w-full absolute -z-1 bg-black opacity-50'> </div>
         </section>
     )
 }

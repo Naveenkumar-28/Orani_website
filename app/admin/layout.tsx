@@ -10,9 +10,9 @@ import { FiMenu } from 'react-icons/fi'
 import { AdminSlider } from "./components";
 import { PiSignOutBold } from 'react-icons/pi'
 import { bodyOverflowHandler, createSendMessage } from '@/utils'
-import { FullScreenLoader, LogoutConfirmation } from '@/components'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../redux/store'
+import { FullScreenLoader, LogoutConfirmation, NotifyContainer } from '@/components'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '../redux/store'
 import { authLogout, getUserdetails } from '../redux'
 import { useUserData } from '@/hooks'
 
@@ -30,14 +30,15 @@ function adminLayout({ children }: Readonly<{ children: React.ReactNode }>) {
         bodyOverflowHandler(false)
     }, [bodyOverflowHandler])
 
-    const { isLoading, user } = useUserData()
+    const { isLoading, user, isSignedIn } = useUserData()
+
+    const loadUser = useCallback(async () => {
+        if (!user && !isSignedIn) {
+            await dispatch(getUserdetails())
+        }
+    }, [user, isSignedIn, dispatch])
 
     useEffect(() => {
-        const loadUser = async () => {
-            if (!user) {
-                await dispatch(getUserdetails()).unwrap();
-            }
-        };
         loadUser();
     }, []);
 
@@ -52,16 +53,16 @@ function adminLayout({ children }: Readonly<{ children: React.ReactNode }>) {
         } catch (error) {
             sendmessage.error("Logout failed!")
         }
-    }, [sendmessage, dispatch])
+    }, [sendmessage, dispatch, logoutConfirmationCloseHandler])
 
 
 
     return (
         <section className=' 2xl:container mx-auto min-h-screen' >
             <div className='flex px-5 lg:static justify-between items-center md:h-18 lg:h-20 h-16 border-b border-gray-300 sticky top-0 z-20 bg-white'>
-                <div className='flex justify-center  gap-2'>
-                    <IoStatsChart className='md:text-3xl text-2xl text-green' />
-                    <h1 className='font-semibold md:text-3xl text-2xl'>Admin Panel</h1>
+                <div className='flex justify-center gap-2'>
+                    <IoStatsChart className='md:text-[1.8rem] text-2xl text-green md:mt-0.5' />
+                    <h1 className='font-semibold md:text-[1.8rem] text-2xl'>Admin Panel</h1>
                 </div>
 
                 <button disabled={isLoading} onClick={() => setOpenConfirmation(true)} className={`${isLoading ? "bg-gray-500" : "bg-red-500 active:ring-2 hover:opacity-90 active:ring-red-500"}  items-center gap-3  duration-200 shadow-md lg:flex hidden cursor-pointer h-11 px-5 font-medium outline-none rounded-lg text-white`}>
@@ -71,14 +72,13 @@ function adminLayout({ children }: Readonly<{ children: React.ReactNode }>) {
 
                 <div onClick={() => {
                     setShow(true)
-                }} className='md:text-3xl text-2xl cursor-pointer ring-2 active:ring-4 hover:text-white hover:bg-green text-green ring-green duration-200 lg:hidden p-1 rounded-sm shadow-md'>
+                }} className='md:text-3xl text-2xl cursor-pointer ring-2 active:ring-3 hover:text-white hover:shadow-sm bg-green text-white ring-green duration-200 lg:hidden p-1 rounded-sm shadow-md'>
                     <FiMenu />
                 </div>
             </div>
             <div className='flex'>
-                <div className='lg:w-3/12  sticky top-0 h-dvh py-5 hidden lg:block  border-r border-gray-300  px-5'>
+                <div className='lg:w-3/12 sticky top-0 h-dvh py-5 hidden lg:flex  border-r border-gray-300 px-5  flex-col justify-between '>
                     <div className='flex flex-col gap-3 '>
-
                         <Link href='dashboard' className={`${pathName == "/admin/dashboard" ? "bg-green text-white" : "hover:bg-gray-100"} flex gap-2 cursor-pointer py-3 items-center px-5 rounded-md`}>
                             <MdSpaceDashboard className={`${pathName == "/admin/dashboard" ? "text-white" : "text-green"}`} />
                             <h1>Dashboard</h1>
@@ -95,6 +95,7 @@ function adminLayout({ children }: Readonly<{ children: React.ReactNode }>) {
                     </div>
                 </div>
                 <div className='lg:w-9/12 w-full h-full overflow-x-hidden pt-5'>
+                    <NotifyContainer leftSide={true} />
                     {children}
                 </div>
             </div>

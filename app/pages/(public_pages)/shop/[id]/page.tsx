@@ -1,6 +1,6 @@
 "use client"
 import { useParams } from 'next/navigation'
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { MenuSection } from '@/components'
 import { RelatedProduct, RelatedProductsSectionSkeleton, SpecificProduct, SpecificProductSkeleton } from './components'
 import { useDispatch, useSelector } from 'react-redux'
@@ -14,16 +14,20 @@ const page = () => {
     const dispatch = useDispatch<AppDispatch>()
     const sendMessage = createSendMessage()
 
-    const { isError, isLoading, relatedProducts, specificProduct } = useSelector((state: RootState) => state.specificProduct)
+    const { isLoading, relatedProducts, specificProduct } = useSelector((state: RootState) => state.specificProduct)
 
+    const getSpecificProduct = useCallback(async () => {
+        try {
+            await dispatch(fetchSpecificProduct({ id: params.id as string }))
 
-    if (isError) {
-        sendMessage.error("Network error !")
-    }
+        } catch (error) {
+            sendMessage.error("Something went wrong please try again later")
+        }
+    }, [dispatch, sendMessage, params.id])
 
     useEffect(() => {
-        dispatch(fetchSpecificProduct({ id: params.id as string }))
-    }, [])
+        getSpecificProduct()
+    }, [params.id])
 
     return (
 

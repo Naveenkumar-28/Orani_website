@@ -13,15 +13,15 @@ export const useProductSliderHandlers = () => {
     const buttonHandler = useCallback(({ name, action }: { name: string, action: string }) => {
         switch (name) {
             case "latestProduct":
-                if (action == "back" && latestProductSliderRef.current) return latestProductSliderRef.current?.slickNext()
+                if (action == "next" && latestProductSliderRef.current) return latestProductSliderRef.current?.slickNext()
                 if (action == "forward" && latestProductSliderRef.current) return latestProductSliderRef.current?.slickPrev()
                 break;
             case "topRatedProduct":
-                if (action == "back" && topRatedSliderRef.current) return topRatedSliderRef.current?.slickNext()
+                if (action == "next" && topRatedSliderRef.current) return topRatedSliderRef.current?.slickNext()
                 if (action == "forward" && topRatedSliderRef.current) return topRatedSliderRef.current?.slickPrev()
                 break;
             case "bestReviewProduct":
-                if (action == "back" && bestReviewSliderRef.current) return bestReviewSliderRef.current?.slickNext()
+                if (action == "next" && bestReviewSliderRef.current) return bestReviewSliderRef.current?.slickNext()
                 if (action == "forward" && bestReviewSliderRef.current) return bestReviewSliderRef.current?.slickPrev()
                 break;
             default:

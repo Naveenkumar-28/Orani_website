@@ -48,7 +48,7 @@ export function Dropdown({
             {isActive && (
                 <div className={`absolute bg-white ${dropdownPosition} shadow-md left-0 z-20 w-full ring-2 ring-gray-100  rounded-md overflow-hidden  ${dropdownStyle}`}>
                     {renderItems?.map((status, index) => {
-                        return <div key={index} onClick={() => statusHandler(status)} className={` ${status?.toLowerCase() == currentStatus?.toLowerCase() ? "bg-green text-white" : "hover:bg-gray-100"} capitalize py-1 px-5 cursor-pointer duration-200 text-sm md:text-base md:py-2`}>{status}</div>
+                        return <div key={index} onClick={() => statusHandler(status)} className={` ${status?.toLowerCase() == currentStatus?.toLowerCase() ? "bg-green text-white" : "hover:bg-gray-100"} capitalize py-1 px-5 cursor-pointer duration-200 text-sm md:text-base py-2`}>{status}</div>
                     })}
                 </div>
             )}

@@ -13,7 +13,7 @@ function FeaturedProductSection() {
     const router = useRouter()
     const firstRender = useRef(true)
     const [categorySelect, setCategorySelect] = useState('')
-    const categoryList = useMemo(() => ["all", "oranges", "juice", "vegetables", "fruits"], [])
+    const categoryList = useMemo(() => ["all", "oranges", "juices", "vegetables", "fruits"], [])
 
     const SearcheParams = typeof window !== 'undefined' ? useSearchParams() : null
     const category = SearcheParams?.get('category')

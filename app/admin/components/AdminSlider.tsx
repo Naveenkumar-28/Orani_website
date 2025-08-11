@@ -53,28 +53,28 @@ export function AdminSlider({ setShow, setOpenConfirmation }: Props) {
 
     return (
         <div className='fixed top-0 left-0 h-full w-full z-50 lg:hidden '>
-            <div className={`${isvisible ? "-translate-x-0" : "-translate-x-full"} sm:py-2 duration-500 lg:w-3/12 h-full w-12/12 max-w-[360px] md:max-w-[400px] bg-white z-10 lg:hidden border-r border-gray-300  px-5`}>
-                <div className='flex h-16 justify-between border-b border-gray-300 items-center '>
-                    <div className='flex gap-2 items-center'>
-                        <IoStatsChart className='md:text-2xl text-xl text-green' />
-                        <h1 className='font-semibold text-2xl'>Admin Panel</h1>
+            <div className={`${isvisible ? "-translate-x-0" : "-translate-x-full"} duration-500 lg:w-3/12 h-full w-12/12 max-w-[360px] md:max-w-[400px] bg-white z-10 lg:hidden border-r border-gray-300 px-5`}>
+                <div className='flex h-16 justify-between border-b border-gray-300 items-center md:h-18'>
+                    <div className='flex justify-center gap-2'>
+                        <IoStatsChart className='md:text-[1.8rem] text-2xl text-green md:mt-0.5' />
+                        <h1 className='font-semibold md:text-[1.8rem] text-2xl'>Admin Panel</h1>
                     </div>
-                    <button onClick={handleClose} className='text-2xl text-gray-400 cursor-pointer hover:text-red-500'>
+                    <button onClick={handleClose} className='text-2xl md:text-3xl text-gray-400 cursor-pointer hover:text-red-500'>
                         <IoClose />
                     </button>
                 </div>
-                <div className='h-[calc(100%-4rem)] flex flex-col justify-between sm:pt-8 pt-5 pb-8'>
-                    <div className='flex flex-col sm:gap-5 gap-3 '>
-                        <Link onClick={handleClose} href='dashboard' className={`${pathName == "/admin/dashboard" ? "bg-green text-white" : "hover:bg-gray-100"} flex gap-2 cursor-pointer py-2 sm:py-3 items-center px-3 sm:px-5 rounded-lg`}>
+                <div className='h-[calc(100%-4rem)] md:h-[calc(100%-4.5rem)] flex flex-col justify-between pt-3 pb-5'>
+                    <div className='flex flex-col  gap-3 pt-3'>
+                        <Link onClick={handleClose} href='dashboard' className={`${pathName == "/admin/dashboard" ? "bg-green text-white" : "hover:bg-gray-100"} flex gap-2 cursor-pointer py-2.5 sm:py-3 items-center px-3 sm:px-5 rounded-lg`}>
                             <MdSpaceDashboard className={`text-lg ${pathName != "/admin/dashboard" && "text-green"}`} />
                             <h1>Dashboard</h1>
                         </Link>
-                        <Link onClick={handleClose} href='products' className={`${pathName == "/admin/products" ? "bg-green text-white" : "hover:bg-gray-100"} flex gap-2 cursor-pointer py-2 sm:py-3 items-center px-3 sm:px-5 rounded-lg`}>
+                        <Link onClick={handleClose} href='products' className={`${pathName == "/admin/products" ? "bg-green text-white" : "hover:bg-gray-100"} flex gap-2 cursor-pointer py-2.5 sm:py-3 items-center px-3 sm:px-5 rounded-lg`}>
                             <BsInboxesFill className={`text-md ${pathName != "/admin/products" && "text-green"}`} />
 
                             <h1>Products</h1>
                         </Link>
-                        <Link onClick={handleClose} href='orders' className={`${pathName == "/admin/orders" ? "bg-green text-white" : "hover:bg-gray-100"} flex gap-2 cursor-pointer py-2 sm:py-3 items-center px-3 sm:px-5 rounded-lg`}>
+                        <Link onClick={handleClose} href='orders' className={`${pathName == "/admin/orders" ? "bg-green text-white" : "hover:bg-gray-100"} flex gap-2 cursor-pointer py-2.5 sm:py-3 items-center px-3 sm:px-5 rounded-lg`}>
                             <IoIosListBox className={`text-md ${pathName != "/admin/orders" && "text-green"}`} />
                             <h1>Orders</h1>
                         </Link>
@@ -83,7 +83,6 @@ export function AdminSlider({ setShow, setOpenConfirmation }: Props) {
                         <p >Sign Out</p>
                         <PiSignOutBold className='text-lg' />
                     </button>
-
                 </div>
             </div>
             <div onClick={handleClose} className='bg-black absolute top-0 left-0 h-full w-full opacity-30 -z-1'>

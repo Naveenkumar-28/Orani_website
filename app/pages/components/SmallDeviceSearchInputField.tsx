@@ -39,7 +39,7 @@ export const SmallDeviceSearchInputField = memo(({ setIsOpen }: { setIsOpen: Rea
         <div className="flex relative items-center w-full flex-col mediaQuary">
             {/* Search input field */}
             <div className=' w-full bg-white border-gray-300 flex items-center justify-between h-14 border-b-2'>
-                <div className='flex items-center gap-2'>
+                <div className='flex items-center gap-2 w-full h-full'>
                     <div className='px-2' onClick={closerHandler}>
                         <IoArrowBack className='text-2xl text-green cursor-pointer' />
                     </div>

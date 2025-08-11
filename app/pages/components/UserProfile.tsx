@@ -11,7 +11,7 @@ import { LoadingIndicator, Avatar, LogoutConfirmation, FullScreenLoader } from '
 import { bodyOverflowHandler } from '@/utils'
 
 export const UserProfile = memo(() => {
-    const { user, isLoading: userLoding } = useUserData()
+    const { user, isLoading: userLoding, isSignedIn } = useUserData()
     const [isOpenLogoutConfirmation, setOpenLogoutConfirmation] = useState(false)
     const router = useRouter()
 
@@ -55,7 +55,7 @@ export const UserProfile = memo(() => {
 
             </div>
 
-            <div className={`${isShow ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-5 pointer-events-none'} px-3 py-3 mr-2 duration-200 ease-in-out absolute rounded-md ring-1 ring-gray-300 min-w-56 bg-white top-15 right-0 flex flex-col gap-5 shadow-lg`}>
+            <div className={`${isShow ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-5 pointer-events-none'} ${isSignedIn ? "px-3 py-3" : "px-2 py-2"} mr-2 duration-200 ease-in-out absolute rounded-md ring-1 ring-gray-300 min-w-full bg-white top-15 right-0 flex flex-col gap-5 shadow-lg`}>
                 {user ? (
                     <>
                         <div className=' relative flex justify-center items-center gap-5 '>
@@ -85,10 +85,12 @@ export const UserProfile = memo(() => {
                 ) : (
                     <div className='w-full'>
                         <button onClick={() => router.push('/auth/login')} className='userDetailsBtn'>
-                            <GoSignIn className='lg:text-lg text-base' /><span className=' text-sm font-normal'> SignIn</span>
+                            <GoSignIn className='lg:text-lg text-base' />
+                            <span className=' text-sm font-normal'> Signin</span>
                         </button>
                         <button onClick={() => router.push('/auth/register')} className='userDetailsBtn'>
-                            <VscSignIn className='lg:text-lg text-base' /><span className=' text-sm font-normal'> SignUp</span>
+                            <VscSignIn className='lg:text-lg text-base' />
+                            <span className=' text-sm font-normal'> Signup</span>
                         </button>
                     </div>
                 )}

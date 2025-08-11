@@ -59,16 +59,15 @@ export const useLoginHandler = () => {
             sendMessage.success("Login successfully!");
 
         } catch (err: any) {
-            console.log({ err });
             setErrors(prev => ({
                 ...prev,
                 [err?.field]: err?.message
             }));
-            sendMessage.error(err?.message || "Something went wrong!");
+            sendMessage.error(err?.message || "Login failed please try again later");
         } finally {
             setIsLoading(false);
         }
-    }, [getCartLocalStoreList]);
+    }, [getCartLocalStoreList, dispatch, sendMessage]);
 
 
     // Validate form data
@@ -95,7 +94,7 @@ export const useLoginHandler = () => {
         } finally {
             setErrors(initialState)
         }
-    }, [checkCredentials])
+    }, [checkCredentials, sendMessage])
 
 
     return { loginFormData, loginFormValidateHandler, isLoading }
