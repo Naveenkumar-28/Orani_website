@@ -11,6 +11,7 @@ function FeaturedProductSection() {
     const [limit, setLimit] = useState(8)
     const dispatch = useDispatch<AppDispatch>()
     const router = useRouter()
+
     const firstRender = useRef(true)
     const [categorySelect, setCategorySelect] = useState('')
     const categoryList = useMemo(() => ["all", "oranges", "juices", "vegetables", "fruits"], [])
@@ -39,6 +40,10 @@ function FeaturedProductSection() {
         GetProductList(1, categorySelect);
     }, [categorySelect]);
 
+    const handleCategoryClick = useCallback((name: string) => {
+        router.push(`/pages/shop?category=${name}`, { scroll: false });
+    }, [router])
+
     return (
         <>
             <MenuSection name={'our Shop'} />
@@ -46,14 +51,12 @@ function FeaturedProductSection() {
                 <div className='overflow-x-auto mb-5 lg:mb-10'>
                     <div className="flex justify-center md:gap-5 gap-3 select-none min-w-fit mb-5">
                         {
-                            categoryList.map((Name, index) => {
+                            categoryList.map((name, index) => {
                                 return (
-                                    <p onClick={() => {
-                                        router.push(`/pages/shop?category=${Name}`);
-                                    }}
+                                    <p onClick={() => handleCategoryClick(name)}
                                         key={index}
-                                        className={`${categorySelect == Name.toLowerCase() ? "bg-green font-normal text-white" : "bg-transparent font-normal"} text-gray-500 active:scale-95 duration-200 xl:text-lg lg:text-base text-sm cursor-pointer md:px-5 px-3 py-1.5 rounded-md capitalize`} >
-                                        {Name}
+                                        className={`${categorySelect == name.toLowerCase() ? "bg-green font-normal text-white" : "bg-transparent font-normal"} text-gray-500 active:scale-95 duration-200 xl:text-lg lg:text-base text-sm cursor-pointer md:px-5 px-3 py-1.5 rounded-md capitalize`} >
+                                        {name}
                                     </p>
                                 )
                             })
